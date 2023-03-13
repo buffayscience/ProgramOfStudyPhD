@@ -34,17 +34,21 @@ var countrySateCityinfo = {
     
 }
 
+selectTerm = document.getElementById('term'),
+selectDept = document.getElementById('department'),
+// selectCourse = document.getElementById('course'),
+selects = document.querySelectorAll('select')
 window.onload = function(){
 
     // const selectCountry = document.getElementById('country'),
-        selectState = document.getElementById('state'),
-        selectCity = document.getElementById('city'),
-        selectZip = document.getElementById('zip'),
+        selectTerm = document.getElementById('term'),
+        selectDept = document.getElementById('department'),
+        // selectCourse = document.getElementById('course'),
         selects = document.querySelectorAll('select')
 
-        // selectState.disabled = true
-        selectCity.disabled = true
-        selectZip.disabled = true
+        // selectTerm.disabled = true
+        selectDept.disabled = true
+        // selectCourse.disabled = true
 
         selects.forEach(select => {
             if(select.disabled == true){
@@ -59,15 +63,15 @@ window.onload = function(){
 
          for(let state in countrySateCityinfo){
             console.log(state);
-            selectState.options[selectState.options.length] =
+            selectTerm.options[selectTerm.options.length] =
              new Option(state, state)
         }
 
 
-        // state change
-        selectState.onchange = (e) =>{
-            selectCity.disabled = false
-            selectZip.disabled = true
+        // term change
+        selectTerm.onchange = (e) =>{
+            selectDept.disabled = false
+            // selectCourse.disabled = true
 
             selects.forEach(select => {
                 if(select.disabled == true){
@@ -78,36 +82,74 @@ window.onload = function(){
                 }
             })
 
-            selectCity.length = 1
-            selectZip.length = 1
+            selectDept.length = 1
+            // selectCourse.length = 1
 
             // for(let city in countrySateCityinfo[selectCountry.value][e.target.value]){
-                for(let city in countrySateCityinfo[selectState.value]){
+                for(let city in countrySateCityinfo[selectTerm.value]){
                 console.log(city);
-                selectCity.options[selectCity.options.length] = new Option(city, city)
+                selectDept.options[selectDept.options.length] = new Option(city, city)
             }
         }
 
-        // change city
-        selectCity.onchange = (e) =>{
-            selectZip.disabled = false
+        // change Department
+        selectDept.onchange = (e) =>{
+            fetchData();
 
-            selects.forEach(select => {
-                if(select.disabled == true){
-                    select.style.cursor = "auto"
-                }
-                else{
-                    select.style.cursor = "pointer"
-                }
-            })
-            
-            selectZip.length = 1
+            // selectCourse.disabled = false
 
-            // let zips = countrySateCityinfo[selectCountry.value][selectState.value][e.target.value]
-            let zips = countrySateCityinfo[selectState.value][selectCity.value]
+            // selects.forEach(select => {
+            //     if(select.disabled == true){
+            //         select.style.cursor = "auto"
+            //     }
+            //     else{
+            //         select.style.cursor = "pointer"
+            //     }
+            // })
             
-            for(let i=0; i<zips.length; i++){
-                selectZip.options[selectZip.options.length] = new Option(zips[i], zips[i])
-            }
+            // selectCourse.length = 1
+
+            // let zips = countrySateCityinfo[selectCountry.value][selectTerm.value][e.target.value]
+            // let zips = countrySateCityinfo[selectTerm.value][selectDept.value]
+            
+            // for(let i=0; i<zips.length; i++){
+            //     console.log(zips[i]);
+
+            //     selectCourse.options[selectCourse.options.length] = new Option(zips[i], zips[i])
+            // }
         }
 }
+
+
+
+function fetchData(){
+
+    // fetch("https://reqres.in/api/users")
+    // .then(response =>{
+    //     console.log(response);
+    //     if(!response.ok){
+    //         throw Error("Error");
+    //     }
+    //     return response.json();
+
+    // })
+    // .then(data =>{
+        console.log("testing the fetch");
+        console.log(countrySateCityinfo);
+        let courses = countrySateCityinfo[selectTerm.value][selectDept.value]
+        const html = courses.map
+        (user =>{
+            return `<div class="user"><p>${user}</p>`;
+        }).join("");
+        console.log(html);
+
+        console.log(courses);
+        document.querySelector('#app').insertAdjacentHTML("afterbegin",html);
+    // })
+   
+
+
+}
+
+fetchData();
+
