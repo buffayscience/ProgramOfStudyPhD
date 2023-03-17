@@ -1,3 +1,4 @@
+
 var countrySateCityinfo = {
   Spring: {
     "Computer Science": [
@@ -114,7 +115,16 @@ window.onload = function () {
 };
 
 const mySet = new Set();
+class Course {
+  constructor(term,courseName) {
+    this.term = term;
+    this.courseName = courseName;
+  }
 
+  toString() {
+    console.log(` ${this.term} + ${this.courseName}`);
+  }
+}
 function fetchData() {
   console.log("testing the fetch");
   console.log(countrySateCityinfo);
@@ -128,7 +138,7 @@ function fetchData() {
   for (let i = 0; i < courses.length; i++) {
     courseListTable.innerHTML += `
                 <tr>
-                    <td><p id="table-data" >${courses[i]}</p>  <button class="deleteBtn" id = "add-btn">Add</button></td>
+                    <td class = "course-data"><p  id="table-data" >${courses[i]}</p>  <button class="deleteBtn" id = "add-btn">Add</button></td>
                 </tr>
             `;
   }
@@ -139,11 +149,14 @@ function fetchData() {
     const addBtn = tdata.querySelector("button");
 
     addBtn.addEventListener("click", () => {
+      
       const data = courseName.innerText; // Get the text content of the <td> element
-      if (!mySet.has(data)) {
-        mySet.add(data);
+      const termData = selectTerm.value + "-" +data;
+      const course = new Course(selectTerm.value,data);
+      if (!mySet.has(course)) {
+        mySet.add(course);
       } else {
-        alert(data + "is already present");
+        alert(course.toString + "is already present");
       }
 
       console.log(mySet);
@@ -151,10 +164,11 @@ function fetchData() {
       for (const value of mySet) {
         courseListAddedTable.innerHTML += `
                     <tr>
-                        <td><p id="table-data" >${value}</p>  <button class="deleteBtn" id = "add-btn">Add</button></td>
-                    </tr>
-                `;
+                        <td><p id="table-data" >${value.term+" - " + value.courseName}</p>  <button class="deleteBtn" id = "add-btn">Add</button></td>
+                    </tr>`;
       }
+
+
     });
   });
 }
