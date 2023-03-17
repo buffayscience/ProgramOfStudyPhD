@@ -84,8 +84,8 @@
     
       .select-clicked
     {
-      border: 2px #26489a solid;
-      box-shadow:  0 0 0.8em #26489a;
+      border: 2px #e5b941 solid;
+      box-shadow:  0 0 0.8em #e5b941;
     
     }
     
@@ -166,7 +166,7 @@
       display: flex;
       align-items: center;
       flex-direction: row;
-      gap: 15px;
+      gap: 150px;
   }
   
   form select{
@@ -219,3 +219,61 @@
     font-size: 1.5em;
     background: rgba(0, 0, 0, 0.08);
   }
+
+  .left-div {
+    margin-top: 1cm;
+    width: 50%;
+    float: left;
+    height:flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .right-div {
+    margin-top: 1cm;
+    width: 50%;
+    float: left;
+    height: flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+  }
+  .centered {
+
+    width: 80%;
+    padding: 15px;
+    padding-left: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+    box-shadow: 0 5px 10px 0 rgb(0,0,0,0.25);
+    /* cursor: pointer; */
+
+  }
+
+
+  .course-data{
+    margin: 10px;
+     background-color: #3C3C3C;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin: 10px;
+    font-size:medium;
+    font-family: sans-serif;
+    text-align: center;
+    color: white;
+    margin: 4px 0px;  
+
+  }
+
+  .add-button{
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 100px;
+    border: yellow;
+  }
+
+

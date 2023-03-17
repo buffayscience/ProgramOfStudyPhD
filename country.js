@@ -120,6 +120,7 @@ window.onload = function(){
         }
 }
 
+courseName;
 
 
 function fetchData(){
@@ -134,22 +135,35 @@ function fetchData(){
 
     // })
     // .then(data =>{
+        app = document.getElementById('app');
+        app.innerHTML = "";
+
         console.log("testing the fetch");
         console.log(countrySateCityinfo);
         let courses = countrySateCityinfo[selectTerm.value][selectDept.value]
         const html = courses.map
         (user =>{
-            return `<div class="user"><p>${user}</p>`;
+            return `<div class="user" id = "user" onmouseover="function_name()"><p class="course-data" id="course-name">${user}</p>
+            <button type="button" id = "add-course-button" class="add-button">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+	</button>`;
         }).join("");
-        console.log(html);
-
-        console.log(courses);
+        // console.log(html);
+        
+        
+        // console.log(courses);
         document.querySelector('#app').insertAdjacentHTML("afterbegin",html);
-    // })
-   
-
+        // courseName= document.getElementById('course-name').innerText;
+      
 
 }
+function function_name(){
+     courseName= document.getElementById('user');
+     data = courseName.closest("p").innerText;
+    console.log(data);
+}
+
+
 
 fetchData();
 
