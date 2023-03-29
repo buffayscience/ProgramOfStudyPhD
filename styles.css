@@ -209,7 +209,7 @@ form select {
 
 .left-div {
   margin-top: 1cm;
-  width: 50%;
+  width: 40%;
   float: left;
   height: flex;
   display: flex;
@@ -218,7 +218,7 @@ form select {
 }
 .right-div {
   margin-top: 1cm;
-  width: 50%;
+  width: 60%;
   float: left;
   height: flex;
   display: flex;
@@ -290,4 +290,24 @@ form select {
 
 .table{
   overflow-x: auto;
+}
+
+#myTextBox{
+  width: 50px;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 5px;
+  
+}
+
+.addMinusBtn {
+  border-radius: 50%;
+  background-color: #e5b941;
+  color: white;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  border: none;
+  margin: 5px;
+  cursor: pointer;
 }
