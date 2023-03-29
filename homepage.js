@@ -69,7 +69,6 @@ window.onload = function () {
     });
 
     for (let term in termDeptInfo) {
-      console.log(term);
       selectTerm.options[selectTerm.options.length] = new Option(term, term);
     }
 
@@ -98,8 +97,7 @@ window.onload = function () {
     };
   };
 
-  const mySet = new Set();
-  const courseNameSet = new Set();
+  const hashMap = {};
   class Course {
     constructor(year, term, courseName, credits) {
       this.term = term;
@@ -107,10 +105,15 @@ window.onload = function () {
       this.year = year;
       this.credits = credits;
     }
+
+    greet() {
+      console.log(
+        ` ${this.term} - ${this.courseName}  -  ${this.year} -  ${this.credits} `
+      );
+    }
   }
   function fetchData() {
-    console.log("testing the fetch");
-    console.log(termDeptInfo);
+
     let courses = termDeptInfo[selectTerm.value][selectDept.value];
 
     const courseListTable = document.getElementById("courseList");
@@ -132,66 +135,88 @@ window.onload = function () {
 
       addBtn.addEventListener("click", () => {
         const data = courseName.innerText; // Get the text content of the <td> element
-
         const termData = selectYear.value + "-" + selectTerm.value + "-" + data;
-        const course = new Course(selectYear.value, selectTerm.value, data);
-        if (!courseNameSet.has(termData)) {
-          mySet.add(course);
-          courseNameSet.add(termData);
-          courseListAddedTable.innerHTML += `
+        const course = new Course(selectYear.value, selectTerm.value, data,3);
+
+        if (!hashMap.hasOwnProperty(termData)) {
+          hashMap[termData] = course;
+          const newRow = document.createElement("tr");
+
+          newRow.innerHTML = `
           <tr>
-              <td class="data-row" ><p >${
-                course.year + " - " + course.term + " - " + course.courseName    }</p> <button   class="addMinusBtn" id = "minusBtn">-</button>
+              
+          <td class="data-row" >
+          <div class="selectcoursesParent">
+          <div class="leftCourses">
+              <p >${termData}</p>
+                </div>
+                <div class="rightCourses">
+                <button   class="addMinusBtn" id = "minusBtn">-</button>
               <input type="number" id="myTextBox" />
               <button class="addMinusBtn" id = "plusBtn">+</button>
+              </div>
+              </div>
+
               </td>
           </tr>`;
-          showData();
+          courseListAddedTable.appendChild(newRow);
+
+          showData(newRow);
         } else {
           alert(termData + "is already present");
         }
 
-        console.log(mySet);
-        console.log(courseNameSet);
+        
       });
     });
   }
 
-  function showData() {
+  function showData(newRow) {
     const addedCourses = document.querySelectorAll("td.data-row");
     console.log(addedCourses);
 
-    for (i = 0; i < addedCourses.length; i++) {
-      console.log("testing addedcourses");
-      var numBox = addedCourses[i].querySelector("input");
-      var addBtn = addedCourses[i].querySelector("#plusBtn");
-      var minusBtn = addedCourses[i].querySelector("#minusBtn");
-      if (numBox.value.length == 0) {
-        numBox.value = 3;
-      }
+    // for (i = 0; i < addedCourses.length; i++) {
+    var courseName = newRow.querySelector("p"); // Find the element with the specific ID inside the <td> element
 
-      addBtn.onclick = function () {
-        if (numBox.value < 18) {
-          numBox.value = parseInt(numBox.value) + 1;
-        }
-      };
-
-      minusBtn.onclick = function () {
-        if (numBox.value > 1) {
-          numBox.value = parseInt(numBox.value) - 1;
-        }
-      };
-
-      numBox.addEventListener("input", function () {
-        var regex = /[^0-9]/gi;
-        numBox.value = numBox.value.replace(regex, "");
-        if (numBox.value < 1) {
-          numBox.value = 1;
-        } else if (numBox.value > 18) {
-          numBox.value = 18;
-        }
-      });
+    const data = courseName.innerText; // Get the text content of the <td> element
+    var numBox = newRow.querySelector("input");
+    var addBtn = newRow.querySelector("#plusBtn");
+    var minusBtn = newRow.querySelector("#minusBtn");
+    if (numBox.value.length == 0) {
+      numBox.value = 3;
     }
+   
+
+    addBtn.onclick = function () {
+      if (numBox.value < 18) {
+        numBox.value = parseInt(numBox.value) + 1;
+        hashMap[data].credits = numBox.value;
+        console.log("-------"+hashMap[data].credits);
+        console.log("-------"+hashMap[data].greet());
+
+
+      }
+    };
+
+    minusBtn.onclick = function () {
+      if (numBox.value > 1) {
+        numBox.value = parseInt(numBox.value) - 1;
+        hashMap[data].credits = numBox.value;
+        console.log("-------"+hashMap[data].credits);
+        console.log("-------"+hashMap[data].greet());
+      }
+    };
+
+    numBox.addEventListener("input", function () {
+      var regex = /[^0-9]/gi;
+      numBox.value = numBox.value.replace(regex, "");
+      if (numBox.value < 1) {
+        numBox.value = 1;
+      } else if (numBox.value > 18) {
+        numBox.value = 18;
+      }
+    });
   }
+  // }
   fetchData();
 };
