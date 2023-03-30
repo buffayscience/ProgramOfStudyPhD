@@ -36,11 +36,29 @@ window.onload = function () {
     (selectTerm = document.getElementById("term")),
     (selectDept = document.getElementById("department")),
     (selects = document.querySelectorAll("select"));
+  verifyBtn = document.querySelector("#verifyBtn");
+  coursesDiv = document.querySelector(".left-div");
+  selectedCoursesDiv = document.querySelector(".right-div");
+
+
+      
+
+
   const courseListAddedTable = document.getElementById("courseListAdded");
   courseListAddedTable.innerHTML = ``;
 
   selectDept.disabled = true;
   selectTerm.disabled = true;
+
+  verifyBtn.addEventListener("click", () => {
+    if (coursesDiv.classList.contains('hide')) {
+      coursesDiv.classList.remove('hide');
+      selectedCoursesDiv.classList.remove('full-screen');
+    } else {
+      coursesDiv.classList.add('hide');
+      selectedCoursesDiv.classList.add('full-screen');
+    }
+  });
 
   selects.forEach((select) => {
     if (select.disabled == true) {
@@ -67,10 +85,13 @@ window.onload = function () {
         select.style.cursor = "pointer";
       }
     });
+    selectTerm.length = 1;
 
     for (let term in termDeptInfo) {
       selectTerm.options[selectTerm.options.length] = new Option(term, term);
     }
+
+  };
 
     selectTerm.onchange = (e) => {
       selectDept.disabled = false;
@@ -95,7 +116,7 @@ window.onload = function () {
     selectDept.onchange = (e) => {
       fetchData();
     };
-  };
+ 
 
   const hashMap = {};
   class Course {
@@ -112,8 +133,10 @@ window.onload = function () {
       );
     }
   }
-  function fetchData() {
 
+  
+
+  function fetchData() {
     let courses = termDeptInfo[selectTerm.value][selectDept.value];
 
     const courseListTable = document.getElementById("courseList");
@@ -136,7 +159,7 @@ window.onload = function () {
       addBtn.addEventListener("click", () => {
         const data = courseName.innerText; // Get the text content of the <td> element
         const termData = selectYear.value + "-" + selectTerm.value + "-" + data;
-        const course = new Course(selectYear.value, selectTerm.value, data,3);
+        const course = new Course(selectYear.value, selectTerm.value, data, 3);
 
         if (!hashMap.hasOwnProperty(termData)) {
           hashMap[termData] = course;
@@ -154,6 +177,7 @@ window.onload = function () {
                 <button   class="addMinusBtn" id = "minusBtn">-</button>
               <input type="number" id="myTextBox" />
               <button class="addMinusBtn" id = "plusBtn">+</button>
+              <button class="deleteBtn" id = "deleteBtn">Delete</button>
               </div>
               </div>
 
@@ -165,8 +189,6 @@ window.onload = function () {
         } else {
           alert(termData + "is already present");
         }
-
-        
       });
     });
   }
@@ -182,19 +204,26 @@ window.onload = function () {
     var numBox = newRow.querySelector("input");
     var addBtn = newRow.querySelector("#plusBtn");
     var minusBtn = newRow.querySelector("#minusBtn");
+    var deleteBtn = newRow.querySelector("#deleteBtn");
+
     if (numBox.value.length == 0) {
       numBox.value = 3;
+
     }
-   
+
+    deleteBtn.onclick = function () {
+      delete  hashMap[data];
+      const row = deleteBtn.parentNode.parentNode;
+      row.remove();
+
+    }
 
     addBtn.onclick = function () {
       if (numBox.value < 18) {
         numBox.value = parseInt(numBox.value) + 1;
         hashMap[data].credits = numBox.value;
-        console.log("-------"+hashMap[data].credits);
-        console.log("-------"+hashMap[data].greet());
-
-
+        console.log("-------" + hashMap[data].credits);
+        console.log("-------" + hashMap[data].greet());
       }
     };
 
@@ -202,8 +231,8 @@ window.onload = function () {
       if (numBox.value > 1) {
         numBox.value = parseInt(numBox.value) - 1;
         hashMap[data].credits = numBox.value;
-        console.log("-------"+hashMap[data].credits);
-        console.log("-------"+hashMap[data].greet());
+        console.log("-------" + hashMap[data].credits);
+        console.log("-------" + hashMap[data].greet());
       }
     };
 
