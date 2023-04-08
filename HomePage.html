@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pos</title>
+    <title>Program of Study PhD</title>
+    <link rel="icon" href="images/uwmIcon.jpg">
     <link rel="stylesheet" href="styles.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
@@ -19,7 +20,7 @@
       alert("called onload event")
     </script>
     <div class="headings">
-      <div class="left"><p id= "posHeading">Program Of Study -PhD</p></div>
+      <div class="left"><p id= "posHeading">Program Of Study - PhD</p></div>
       <div class="right">
         <img class="image-container" />
       </div>
@@ -51,6 +52,9 @@
 
     <div class="container">
       <form action="#">
+        <select name="" id="minor">
+          <option value=""> Select Approved Minor </option>
+      </select>
         <select name="" id="year">
                 <option value=""> Select Year </option>
             </select>
@@ -78,7 +82,7 @@
     <div class="right-div">
       <div class="centered">
         <!-- <div id="app1"></div> -->
-        <table >
+        <table class="courseTable">
           <tbody id="courseListAdded"></tbody>
         </table>
       </div>
@@ -88,9 +92,9 @@
     
     <button type="button" class="button" id="verifyBtn">
 		<span class="button__text">Verify</span>
-		<span class="button__icon">
+		<!-- <span class="button__icon">
             <ion-icon name="add-outline"></ion-icon>
-        		</span>
+        		</span> -->
 	</button>
   </body>
 </html>

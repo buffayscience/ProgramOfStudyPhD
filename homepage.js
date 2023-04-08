@@ -1,3 +1,5 @@
+const approvedMinor = ["Business Management", "Business Administration", "Mathematics"];
+
 const year = ["2015", "2016", "2017", "2018", "2019", "2020"];
 const CompScicourseData = {
   "COMPSCI 422G": "COMPSCI 422G - Introduction to Artificial Intelligence",
@@ -5,6 +7,15 @@ const CompScicourseData = {
   "COMPSCI 431G": "COMPSCI 431G - Programming Languages Concepts ",
   "COMPSCI 458G": "COMPSCI 458G - Computer Architecture  ",
   "COMPSCI 482G": "COMPSCI 482G - Rich Internet Applications ",
+  "COMPSCI 535G":"COMPSCI 535G - Algorithm Design and Analysis",
+  "COMPSCI 537G":"COMPSCI 537G - Introduction to Operating Systems ",
+  "COMPSCI 557G":"COMPSCI 557G - Introduction to Database Systems ",
+  "COMPSCI 710":"COMPSCI 710 - Artificial Intelligence ",
+  "COMPSCI 711":"COMPSCI 711 - Introduction to Machine Learning ",
+  "COMPSCI 725":"COMPSCI 725 - Robot Motion Planning ",
+  "COMPSCI 998":"COMPSCI 998 - Doctoral Thesis ",
+  "COMPSCI 700":"COMPSCI 700 CEAS Graduate Seminar"
+  
 };
 
 const hcaCourseData = {
@@ -32,6 +43,7 @@ var termDeptInfo = {
 };
 
 window.onload = function () {
+  (selectminor = document.getElementById("minor")),
   (selectYear = document.getElementById("year")),
     (selectTerm = document.getElementById("term")),
     (selectDept = document.getElementById("department")),
@@ -67,7 +79,12 @@ window.onload = function () {
       select.style.cursor = "pointer";
     }
   });
-
+  for (var i = 0; i < year.length; i++) {
+    selectminor.options[selectminor.options.length] = new Option(
+      approvedMinor[i],
+      approvedMinor[i]
+    );
+  }
   for (var i = 0; i < year.length; i++) {
     selectYear.options[selectYear.options.length] = new Option(
       year[i],
@@ -146,7 +163,9 @@ window.onload = function () {
     for (const key in courses) {
       courseListTable.innerHTML += `
                 <tr>
-                    <td class = "course-data"><p  id="table-data" >${courses[key]}</p>  <button class="deleteBtn" id = "add-btn">Add</button></td>
+                    <td class = "course-data">
+                    <p  id="table-data" >${courses[key]}</p>  
+                    <button class="deleteBtn" id = "add-btn">Add</button></td>
                 </tr>
             `;
     }
