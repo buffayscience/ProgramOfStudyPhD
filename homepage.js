@@ -1,50 +1,103 @@
-const approvedMinor = ["Business Management", "Business Administration", "Mathematics"];
+const approvedMinor = [
+  "Major",
+  "Minor",
+  "Approved Electives",
+  "Math/Quantitative Methods",
+  "Other Courses",
+  "Doctoral Thesis"
+];
 
 const year = ["2015", "2016", "2017", "2018", "2019", "2020"];
-const CompScicourseData = {
-  "COMPSCI 422G": "COMPSCI 422G - Introduction to Artificial Intelligence",
-  "COMPSCI 425G": "COMPSCI 425G - Introduction to Data Mining",
-  "COMPSCI 431G": "COMPSCI 431G - Programming Languages Concepts ",
-  "COMPSCI 458G": "COMPSCI 458G - Computer Architecture  ",
-  "COMPSCI 482G": "COMPSCI 482G - Rich Internet Applications ",
-  "COMPSCI 535G":"COMPSCI 535G - Algorithm Design and Analysis",
-  "COMPSCI 537G":"COMPSCI 537G - Introduction to Operating Systems ",
-  "COMPSCI 557G":"COMPSCI 557G - Introduction to Database Systems ",
-  "COMPSCI 710":"COMPSCI 710 - Artificial Intelligence ",
-  "COMPSCI 711":"COMPSCI 711 - Introduction to Machine Learning ",
-  "COMPSCI 725":"COMPSCI 725 - Robot Motion Planning ",
-  "COMPSCI 998":"COMPSCI 998 - Doctoral Thesis ",
-  "COMPSCI 700":"COMPSCI 700 CEAS Graduate Seminar"
-  
-};
+CompScicourseData = new Map();
+hcaCourseData = new Map();
+busAdmCourseData = new Map();
+function getCourseData() {
+  console.log('test');
+  fetch('http://localhost:8080/courses/COMPSCI')
+  .then(response => response.json()) 
+  .then(json => {
+    const courseData = json.data;
+     for(let i =0;i<courseData.length;i++){
+      CompScicourseData[courseData[i].departmentCode + courseData[i].courseId] = courseData[i];
+     }
+    //  console.log(CompScicourseData);
+    })
+  .catch(error => console.error(error));
 
-const hcaCourseData = {
-  "HCA 541G": "HCA 541G - Healthcare Information Systems Analysis and Design ",
-  "HCA 723":
-    "HCA 723 - Health Care Systems Applications - Administrative and Clinical ",
-  "HCA 740": " HCA 740 - Introduction to Biomedical Database Applications ",
-  "HCA 743": " HCA 743 - Predictive Analytics in Healthcare ",
-};
+
+  fetch('http://localhost:8080/courses/HCA')
+  .then(response => response.json()) 
+  .then(json => {
+    const courseData = json.data;
+     for(let i =0;i<courseData.length;i++){
+      hcaCourseData[courseData[i].departmentCode + courseData[i].courseId] = courseData[i];
+     }
+    })
+  .catch(error => console.error(error));
+
+  fetch('http://localhost:8080/courses/BUSADM')
+  .then(response => response.json()) 
+  .then(json => {
+    const courseData = json.data;
+     for(let i =0;i<courseData.length;i++){
+      busAdmCourseData[courseData[i].departmentCode + courseData[i].courseId] = courseData[i];
+     }
+    })
+  .catch(error => console.error(error));
+}
+
+//  CompScicourseData = {
+//   "COMPSCI 422G": "COMPSCI 422G - Introduction to Artificial Intelligence",
+//   "COMPSCI 425G": "COMPSCI 425G - Introduction to Data Mining",
+//   "COMPSCI 431G": "COMPSCI 431G - Programming Languages Concepts ",
+//   "COMPSCI 458G": "COMPSCI 458G - Computer Architecture  ",
+//   "COMPSCI 482G": "COMPSCI 482G - Rich Internet Applications ",
+//   "COMPSCI 535G": "COMPSCI 535G - Algorithm Design and Analysis",
+//   "COMPSCI 537G": "COMPSCI 537G - Introduction to Operating Systems ",
+//   "COMPSCI 557G": "COMPSCI 557G - Introduction to Database Systems ",
+//   "COMPSCI 710": "COMPSCI 710 - Artificial Intelligence ",
+//   "COMPSCI 711": "COMPSCI 711 - Introduction to Machine Learning ",
+//   "COMPSCI 725": "COMPSCI 725 - Robot Motion Planning ",
+//   "COMPSCI 998": "COMPSCI 998 - Doctoral Thesis ",
+//   "COMPSCI 700": "COMPSCI 700 CEAS Graduate Seminar",
+// };
+
+
+// const hcaCourseData = {
+//   "HCA 541G": "HCA 541G - Healthcare Information Systems Analysis and Design ",
+//   "HCA 723":
+//     "HCA 723 - Health Care Systems Applications - Administrative and Clinical ",
+//   "HCA 740": " HCA 740 - Introduction to Biomedical Database Applications ",
+//   "HCA 743": " HCA 743 - Predictive Analytics in Healthcare ",
+// };
+getCourseData();
+
 
 var termDeptInfo = {
   Spring: {
     ComputerScience: CompScicourseData,
-    HealthcareAdmis: hcaCourseData,
+    HeathCareAdministration: hcaCourseData,
+    BusinessAdministration:busAdmCourseData,
   },
   Fall: {
     ComputerScience: CompScicourseData,
-    HealthcareAdmis: hcaCourseData,
+    HeathCareAdministration: hcaCourseData,
+    BusinessAdministration:busAdmCourseData,
+
   },
 
   Summer: {
     ComputerScience: CompScicourseData,
-    HealthcareAdmis: hcaCourseData,
+    HeathCareAdministration: hcaCourseData,
+    BusinessAdministration:busAdmCourseData,
+
   },
 };
 
 window.onload = function () {
+
   (selectminor = document.getElementById("minor")),
-  (selectYear = document.getElementById("year")),
+    (selectYear = document.getElementById("year")),
     (selectTerm = document.getElementById("term")),
     (selectDept = document.getElementById("department")),
     (selects = document.querySelectorAll("select"));
@@ -52,24 +105,28 @@ window.onload = function () {
   coursesDiv = document.querySelector(".left-div");
   selectedCoursesDiv = document.querySelector(".right-div");
 
-
-      
-
-
   const courseListAddedTable = document.getElementById("courseListAdded");
   courseListAddedTable.innerHTML = ``;
-
+  selectYear.disabled = true;
   selectDept.disabled = true;
   selectTerm.disabled = true;
 
   verifyBtn.addEventListener("click", () => {
-    if (coursesDiv.classList.contains('hide')) {
-      coursesDiv.classList.remove('hide');
-      selectedCoursesDiv.classList.remove('full-screen');
+    if (coursesDiv.classList.contains("hide")) {
+      coursesDiv.classList.remove("hide");
+      selectedCoursesDiv.classList.remove("full-screen");
     } else {
-      coursesDiv.classList.add('hide');
-      selectedCoursesDiv.classList.add('full-screen');
+      coursesDiv.classList.add("hide");
+      selectedCoursesDiv.classList.add("full-screen");
     }
+
+    console.log(hashMap);
+
+    const myValuesArray = Object.values(hashMap);
+
+    console.log(myValuesArray);
+
+    postData();
   });
 
   selects.forEach((select) => {
@@ -85,12 +142,36 @@ window.onload = function () {
       approvedMinor[i]
     );
   }
-  for (var i = 0; i < year.length; i++) {
-    selectYear.options[selectYear.options.length] = new Option(
-      year[i],
-      year[i]
-    );
-  }
+  // for (var i = 0; i < year.length; i++) {
+  //   selectYear.options[selectYear.options.length] = new Option(
+  //     year[i],
+  //     year[i]
+  //   );
+  // }
+
+  selectminor.onchange = (e) => {
+    selectYear.disabled = false;
+
+    selects.forEach((select) => {
+      if (select.disabled == true) {
+        select.style.cursor = "auto";
+      } else {
+        select.style.cursor = "pointer";
+      }
+    });
+    selectYear.length = 1;
+
+    for (var i = 0; i < year.length; i++) {
+        selectYear.options[selectYear.options.length] = new Option(
+          year[i],
+          year[i]
+        );
+      }
+
+    // for (let term in year) {
+    //   selectYear.options[selectYear.options.length] = new Option(term, term);
+    // }
+  };
 
   selectYear.onchange = (e) => {
     selectTerm.disabled = false;
@@ -107,33 +188,31 @@ window.onload = function () {
     for (let term in termDeptInfo) {
       selectTerm.options[selectTerm.options.length] = new Option(term, term);
     }
-
   };
 
-    selectTerm.onchange = (e) => {
-      selectDept.disabled = false;
+  selectTerm.onchange = (e) => {
+    selectDept.disabled = false;
 
-      selects.forEach((select) => {
-        if (select.disabled == true) {
-          select.style.cursor = "auto";
-        } else {
-          select.style.cursor = "pointer";
-        }
-      });
-
-      selectDept.length = 1;
-
-      for (let dept in termDeptInfo[selectTerm.value]) {
-        console.log(dept);
-        selectDept.options[selectDept.options.length] = new Option(dept, dept);
+    selects.forEach((select) => {
+      if (select.disabled == true) {
+        select.style.cursor = "auto";
+      } else {
+        select.style.cursor = "pointer";
       }
-    };
+    });
 
-    // change Department
-    selectDept.onchange = (e) => {
-      fetchData();
-    };
- 
+    selectDept.length = 1;
+
+    for (let dept in termDeptInfo[selectTerm.value]) {
+      console.log(dept);
+      selectDept.options[selectDept.options.length] = new Option(dept, dept);
+    }
+  };
+
+  // change Department
+  selectDept.onchange = (e) => {
+    fetchData();
+  };
 
   const hashMap = {};
   class Course {
@@ -151,20 +230,51 @@ window.onload = function () {
     }
   }
 
-  
+  function postData(){
 
+    const data = {
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      age: 30
+    };
+    
+    fetch('http://example.com/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+
+  }
+
+ 
   function fetchData() {
     let courses = termDeptInfo[selectTerm.value][selectDept.value];
 
     const courseListTable = document.getElementById("courseList");
-
+    console.log(courses);
     courseListTable.innerHTML = "";
 
     for (const key in courses) {
+      console.log(key);
+
       courseListTable.innerHTML += `
                 <tr>
                     <td class = "course-data">
-                    <p  id="table-data" >${courses[key]}</p>  
+                    <p  id="table-data" >${key +"-"+ courses[key].courseName}</p>  
                     <button class="deleteBtn" id = "add-btn">Add</button></td>
                 </tr>
             `;
@@ -177,8 +287,14 @@ window.onload = function () {
 
       addBtn.addEventListener("click", () => {
         const data = courseName.innerText; // Get the text content of the <td> element
-        const termData = selectYear.value + "-" + selectTerm.value + "-" + data;
-        const course = new Course(selectYear.value, selectTerm.value, data, 3);
+        const termData = selectminor.value+"-"+ selectYear.value + "-" + selectTerm.value + "-" + data;
+        const coursName = data.split("-")[0];
+
+        const course = CompScicourseData[coursName]
+        console.log("-----------------");
+        console.log(course);
+        console.log("-----------------");
+
 
         if (!hashMap.hasOwnProperty(termData)) {
           hashMap[termData] = course;
@@ -227,15 +343,13 @@ window.onload = function () {
 
     if (numBox.value.length == 0) {
       numBox.value = 3;
-
     }
 
     deleteBtn.onclick = function () {
-      delete  hashMap[data];
+      delete hashMap[data];
       const row = deleteBtn.parentNode.parentNode;
       row.remove();
-
-    }
+    };
 
     addBtn.onclick = function () {
       if (numBox.value < 18) {
