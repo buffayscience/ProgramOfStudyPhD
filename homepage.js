@@ -4,98 +4,157 @@ const approvedMinor = [
   "Approved Electives",
   "Math/Quantitative Methods",
   "Other Courses",
-  "Doctoral Thesis"
+  "Doctoral Thesis",
 ];
+
+class CourseModel{
+  constructor(courseId, courseName, courseLevel, maxCredits,minCredits,departmentCode,graduateLevel,credits) {
+    this.courseId = courseId;
+    this.courseName = courseName;
+    this.courseLevel = courseLevel;
+    this.maxCredits = maxCredits;
+    this.minCredits = minCredits;
+    this.departmentCode = departmentCode;
+    this.graduateLevel = graduateLevel;
+    this.credits = credits;
+  
+  }
+
+    greet() {
+      console.log('${this.courseId}${this.courseName}${this.courseLevel} ${this.maxCredits}${this.minCredits}${this.departmentCode}${this.graduateLevel}${this.credits}');
+    }
+}
+
+class SelectedCourseModel {
+  constructor(area, isMastersCourse, isMathCourse, department,courseName,courseNumber,courseLevel,isUWMCourse,credits) {
+    this.area = area;
+    this.isMastersCourse = isMastersCourse;
+    this.isMathCourse = isMathCourse;
+    this.department = department;
+    this.courseName = courseName;
+    this.courseNumber = courseNumber;
+    this.courseLevel = courseLevel;
+    this.isUWMCourse = isUWMCourse;
+    this.credits = credits;
+  }
+
+    greet() {
+      console.log('${this.area}${this.isMastersCourse}${this.isMathCourse} ${this.department}${this.courseName}${this.courseNumber}${this.courseLevel}${this.isUWMCourse}${this.credits}');
+    }
+}
 
 const year = ["2015", "2016", "2017", "2018", "2019", "2020"];
 CompScicourseData = new Map();
 hcaCourseData = new Map();
 busAdmCourseData = new Map();
+
 function getCourseData() {
-  console.log('test');
-  fetch('http://localhost:8080/courses/COMPSCI')
-  .then(response => response.json()) 
-  .then(json => {
-    const courseData = json.data;
-     for(let i =0;i<courseData.length;i++){
-      CompScicourseData[courseData[i].departmentCode + courseData[i].courseId] = courseData[i];
-     }
-    //  console.log(CompScicourseData);
+  console.log("test");
+  fetch("http://localhost:8080/courses/COMPSCI")
+    .then((response) => response.json())
+    .then((json) => {
+      const courseData = json.data;
+      for (let i = 0; i < courseData.length; i++) {
+        CompScicourseData[
+          courseData[i].departmentCode + courseData[i].courseId
+        ] = courseData[i];
+      }
+      //  console.log(CompScicourseData);
     })
-  .catch(error => console.error(error));
+    .catch((error) => console.error(error));
 
-
-  fetch('http://localhost:8080/courses/HCA')
-  .then(response => response.json()) 
-  .then(json => {
-    const courseData = json.data;
-     for(let i =0;i<courseData.length;i++){
-      hcaCourseData[courseData[i].departmentCode + courseData[i].courseId] = courseData[i];
-     }
+  fetch("http://localhost:8080/courses/HCA")
+    .then((response) => response.json())
+    .then((json) => {
+      const courseData = json.data;
+      for (let i = 0; i < courseData.length; i++) {
+        hcaCourseData[courseData[i].departmentCode + courseData[i].courseId] =
+          courseData[i];
+      }
     })
-  .catch(error => console.error(error));
+    .catch((error) => console.error(error));
 
-  fetch('http://localhost:8080/courses/BUSADM')
-  .then(response => response.json()) 
-  .then(json => {
-    const courseData = json.data;
-     for(let i =0;i<courseData.length;i++){
-      busAdmCourseData[courseData[i].departmentCode + courseData[i].courseId] = courseData[i];
-     }
+  fetch("http://localhost:8080/courses/BUSADM")
+    .then((response) => response.json())
+    .then((json) => {
+      const courseData = json.data;
+      for (let i = 0; i < courseData.length; i++) {
+        busAdmCourseData[
+          courseData[i].departmentCode + courseData[i].courseId
+        ] = courseData[i];
+      }
     })
-  .catch(error => console.error(error));
+    .catch((error) => console.error(error));
 }
 
-//  CompScicourseData = {
-//   "COMPSCI 422G": "COMPSCI 422G - Introduction to Artificial Intelligence",
-//   "COMPSCI 425G": "COMPSCI 425G - Introduction to Data Mining",
-//   "COMPSCI 431G": "COMPSCI 431G - Programming Languages Concepts ",
-//   "COMPSCI 458G": "COMPSCI 458G - Computer Architecture  ",
-//   "COMPSCI 482G": "COMPSCI 482G - Rich Internet Applications ",
-//   "COMPSCI 535G": "COMPSCI 535G - Algorithm Design and Analysis",
-//   "COMPSCI 537G": "COMPSCI 537G - Introduction to Operating Systems ",
-//   "COMPSCI 557G": "COMPSCI 557G - Introduction to Database Systems ",
-//   "COMPSCI 710": "COMPSCI 710 - Artificial Intelligence ",
-//   "COMPSCI 711": "COMPSCI 711 - Introduction to Machine Learning ",
-//   "COMPSCI 725": "COMPSCI 725 - Robot Motion Planning ",
-//   "COMPSCI 998": "COMPSCI 998 - Doctoral Thesis ",
-//   "COMPSCI 700": "COMPSCI 700 CEAS Graduate Seminar",
-// };
+function validateCourseData() {
+  var data = new SelectedCourseModel(1,true,true,1,"Algorithm design and analysiaas","CS535",500,true,3);
+  let courses = [];
 
 
-// const hcaCourseData = {
-//   "HCA 541G": "HCA 541G - Healthcare Information Systems Analysis and Design ",
-//   "HCA 723":
-//     "HCA 723 - Health Care Systems Applications - Administrative and Clinical ",
-//   "HCA 740": " HCA 740 - Introduction to Biomedical Database Applications ",
-//   "HCA 743": " HCA 743 - Predictive Analytics in Healthcare ",
-// };
+  var coursesData = {
+    courses: [
+      // {
+      //   area: 1,
+      //   isMastersCourse: true,
+      //   isMathCourse: true,
+      //   department: 1,
+      //   courseName: "Algorithm design and analysis",
+      //   courseNumber: "CS535",
+      //   courseLevel: 500,
+      //   isUWMCourse: true,
+      //   credits: 3,
+      // },
+      // Add the rest of the course objects here
+    ],
+  };
+
+  courses.push(data);
+  console.log(courses);
+  console.log(coursesData);
+
+
+  // Send the data to the backend using jQuery's $.ajax() function
+  $.ajax({
+    url: "http://localhost:8080/courses/validate",
+    type: "POST",
+    data: JSON.stringify(coursesData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    success: function (response) {
+      // If the request was successful, do nothing
+      alert("-"+response.errorMessage);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      // If there was an error, display the error message in an alert box
+      alert("Error: " + textStatus + " - " + errorThrown);
+    },
+  });
+}
+
 getCourseData();
-
 
 var termDeptInfo = {
   Spring: {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
-    BusinessAdministration:busAdmCourseData,
+    BusinessAdministration: busAdmCourseData,
   },
   Fall: {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
-    BusinessAdministration:busAdmCourseData,
-
+    BusinessAdministration: busAdmCourseData,
   },
 
   Summer: {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
-    BusinessAdministration:busAdmCourseData,
-
+    BusinessAdministration: busAdmCourseData,
   },
 };
 
 window.onload = function () {
-
   (selectminor = document.getElementById("minor")),
     (selectYear = document.getElementById("year")),
     (selectTerm = document.getElementById("term")),
@@ -126,7 +185,7 @@ window.onload = function () {
 
     console.log(myValuesArray);
 
-    postData();
+    // validateCourseData();
   });
 
   selects.forEach((select) => {
@@ -162,11 +221,11 @@ window.onload = function () {
     selectYear.length = 1;
 
     for (var i = 0; i < year.length; i++) {
-        selectYear.options[selectYear.options.length] = new Option(
-          year[i],
-          year[i]
-        );
-      }
+      selectYear.options[selectYear.options.length] = new Option(
+        year[i],
+        year[i]
+      );
+    }
 
     // for (let term in year) {
     //   selectYear.options[selectYear.options.length] = new Option(term, term);
@@ -204,7 +263,6 @@ window.onload = function () {
     selectDept.length = 1;
 
     for (let dept in termDeptInfo[selectTerm.value]) {
-      console.log(dept);
       selectDept.options[selectDept.options.length] = new Option(dept, dept);
     }
   };
@@ -215,66 +273,22 @@ window.onload = function () {
   };
 
   const hashMap = {};
-  class Course {
-    constructor(year, term, courseName, credits) {
-      this.term = term;
-      this.courseName = courseName;
-      this.year = year;
-      this.credits = credits;
-    }
-
-    greet() {
-      console.log(
-        ` ${this.term} - ${this.courseName}  -  ${this.year} -  ${this.credits} `
-      );
-    }
-  }
-
-  function postData(){
-
-    const data = {
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      age: 30
-    };
-    
-    fetch('http://example.com/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log(data);
-    })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
-    });
-
-  }
-
  
+
   function fetchData() {
     let courses = termDeptInfo[selectTerm.value][selectDept.value];
 
     const courseListTable = document.getElementById("courseList");
-    console.log(courses);
     courseListTable.innerHTML = "";
 
     for (const key in courses) {
-      console.log(key);
 
       courseListTable.innerHTML += `
                 <tr>
                     <td class = "course-data">
-                    <p  id="table-data" >${key +"-"+ courses[key].courseName}</p>  
+                    <p  id="table-data" >${
+                      key + "-" + courses[key].courseName
+                    }</p>  
                     <button class="deleteBtn" id = "add-btn">Add</button></td>
                 </tr>
             `;
@@ -287,17 +301,26 @@ window.onload = function () {
 
       addBtn.addEventListener("click", () => {
         const data = courseName.innerText; // Get the text content of the <td> element
-        const termData = selectminor.value+"-"+ selectYear.value + "-" + selectTerm.value + "-" + data;
+        const termData =
+          selectminor.value +
+          "-" +
+          selectYear.value +
+          "-" +
+          selectTerm.value +
+          "-" +
+          data;
         const coursName = data.split("-")[0];
 
-        const course = CompScicourseData[coursName]
+        const course = CompScicourseData[coursName];
         console.log("-----------------");
         console.log(course);
         console.log("-----------------");
 
-
         if (!hashMap.hasOwnProperty(termData)) {
           hashMap[termData] = course;
+          hashMap[termData].credits = hashMap[termData].minCredits;
+          console.log(hashMap);
+
           const newRow = document.createElement("tr");
 
           newRow.innerHTML = `
@@ -312,7 +335,10 @@ window.onload = function () {
                 <button   class="addMinusBtn" id = "minusBtn">-</button>
               <input type="number" id="myTextBox" />
               <button class="addMinusBtn" id = "plusBtn">+</button>
+              <input type="checkbox" class="checkBox" id = "isMathCourse">
+              <input type="checkbox" class="checkBox" id = "isMasterCourse">
               <button class="deleteBtn" id = "deleteBtn">Delete</button>
+
               </div>
               </div>
 
@@ -331,6 +357,7 @@ window.onload = function () {
   function showData(newRow) {
     const addedCourses = document.querySelectorAll("td.data-row");
     console.log(addedCourses);
+    
 
     // for (i = 0; i < addedCourses.length; i++) {
     var courseName = newRow.querySelector("p"); // Find the element with the specific ID inside the <td> element
@@ -340,10 +367,30 @@ window.onload = function () {
     var addBtn = newRow.querySelector("#plusBtn");
     var minusBtn = newRow.querySelector("#minusBtn");
     var deleteBtn = newRow.querySelector("#deleteBtn");
+    var mathCourse = newRow.querySelector("#isMathCourse");
+    var masterCourse = newRow.querySelector("#isMasterCourse");
+
 
     if (numBox.value.length == 0) {
-      numBox.value = 3;
+      numBox.value = hashMap[data].minCredits;
     }
+    hashMap[data].isMathCourse = false;
+    hashMap[data].isMastersCourse = false;
+
+    console.log("mathcourse"+mathCourse.checked);
+
+    mathCourse.addEventListener('change', function() {
+      // do something when the checkbox is checked or unchecked\
+      console.log("mathcourse"+mathCourse.checked);
+      hashMap[data].isMathCourse = mathCourse.checked;
+  });
+
+  masterCourse.addEventListener('change', function() {
+    // do something when the checkbox is checked or unchecked\
+    console.log("mastercourse"+masterCourse.checked);
+    hashMap[data].isMastersCourse = masterCourse.checked;
+
+});
 
     deleteBtn.onclick = function () {
       delete hashMap[data];
@@ -352,20 +399,24 @@ window.onload = function () {
     };
 
     addBtn.onclick = function () {
-      if (numBox.value < 18) {
+      minValue = hashMap[data].minCredits;
+      maxValue = hashMap[data].maxCredits;
+      if (numBox.value < maxValue) {
         numBox.value = parseInt(numBox.value) + 1;
-        hashMap[data].credits = numBox.value;
+        hashMap[data].credits = parseInt(numBox.value);
         console.log("-------" + hashMap[data].credits);
-        console.log("-------" + hashMap[data].greet());
+        console.log(hashMap);
       }
     };
 
     minusBtn.onclick = function () {
-      if (numBox.value > 1) {
+      minValue = hashMap[data].minCredits;
+      maxValue = hashMap[data].maxCredits;
+      if (numBox.value > minValue) {
         numBox.value = parseInt(numBox.value) - 1;
-        hashMap[data].credits = numBox.value;
+        hashMap[data].credits = parseInt(numBox.value);
         console.log("-------" + hashMap[data].credits);
-        console.log("-------" + hashMap[data].greet());
+        console.log(hashMap);
       }
     };
 

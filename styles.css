@@ -387,3 +387,10 @@ form select {
 .hide {
   display: none;
 }
+
+.checkBox{
+  width: 20px;
+  height: 20px;
+  background: #323232;
+
+}
