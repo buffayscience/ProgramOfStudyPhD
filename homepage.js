@@ -1,14 +1,34 @@
-const approvedMinor = [
-  "Major",
-  "Minor",
-  "Approved Electives",
-  "Math/Quantitative Methods",
-  "Other Courses",
-  "Doctoral Thesis",
-];
+let approvedMinor = new Map();
+approvedMinor.set("Major", 1);
+approvedMinor.set("Minor", 2);
+approvedMinor.set("Approved Electives", 3);
+approvedMinor.set("Math/Quantitative Methods", 4);
+approvedMinor.set("Other Courses", 5);
+approvedMinor.set("Doctoral Thesis", 6);
 
-class CourseModel{
-  constructor(courseId, courseName, courseLevel, maxCredits,minCredits,departmentCode,graduateLevel,credits) {
+const COMPUTERSCIENCE = "ComputerScience";
+const HEALTHCAREADM = "HeathCareAdministration";
+const BUSINESSADM = "BusinessAdministration";
+const hashMap = {};
+
+
+
+const year = ["2015", "2016", "2017", "2018", "2019", "2020"];
+CompScicourseData = new Map();
+hcaCourseData = new Map();
+busAdmCourseData = new Map();
+
+class CourseModel {
+  constructor(
+    courseId,
+    courseName,
+    courseLevel,
+    maxCredits,
+    minCredits,
+    departmentCode,
+    graduateLevel,
+    credits
+  ) {
     this.courseId = courseId;
     this.courseName = courseName;
     this.courseLevel = courseLevel;
@@ -17,16 +37,27 @@ class CourseModel{
     this.departmentCode = departmentCode;
     this.graduateLevel = graduateLevel;
     this.credits = credits;
-  
   }
 
-    greet() {
-      console.log('${this.courseId}${this.courseName}${this.courseLevel} ${this.maxCredits}${this.minCredits}${this.departmentCode}${this.graduateLevel}${this.credits}');
-    }
+  greet() {
+    console.log(
+      "${this.courseId}${this.courseName}${this.courseLevel} ${this.maxCredits}${this.minCredits}${this.departmentCode}${this.graduateLevel}${this.credits}"
+    );
+  }
 }
 
 class SelectedCourseModel {
-  constructor(area, isMastersCourse, isMathCourse, department,courseName,courseNumber,courseLevel,isUWMCourse,credits) {
+  constructor(
+    area,
+    isMastersCourse,
+    isMathCourse,
+    department,
+    courseName,
+    courseNumber,
+    courseLevel,
+    isUWMCourse,
+    credits
+  ) {
     this.area = area;
     this.isMastersCourse = isMastersCourse;
     this.isMathCourse = isMathCourse;
@@ -38,15 +69,12 @@ class SelectedCourseModel {
     this.credits = credits;
   }
 
-    greet() {
-      console.log('${this.area}${this.isMastersCourse}${this.isMathCourse} ${this.department}${this.courseName}${this.courseNumber}${this.courseLevel}${this.isUWMCourse}${this.credits}');
-    }
+  greet() {
+    console.log(
+      "${this.area}${this.isMastersCourse}${this.isMathCourse} ${this.department}${this.courseName}${this.courseNumber}${this.courseLevel}${this.isUWMCourse}${this.credits}"
+    );
+  }
 }
-
-const year = ["2015", "2016", "2017", "2018", "2019", "2020"];
-CompScicourseData = new Map();
-hcaCourseData = new Map();
-busAdmCourseData = new Map();
 
 function getCourseData() {
   console.log("test");
@@ -88,9 +116,26 @@ function getCourseData() {
 }
 
 function validateCourseData() {
-  var data = new SelectedCourseModel(1,true,true,1,"Algorithm design and analysiaas","CS535",500,true,3);
-  let courses = [];
 
+  
+  console.log(hashMap);
+
+  const myValuesArray = Object.values(hashMap);
+
+  console.log(myValuesArray);
+
+  var data = new SelectedCourseModel(
+    1,
+    true,
+    true,
+    1,
+    "Algorithm design and analysiaas",
+    "CS535",
+    500,
+    true,
+    3
+  );
+  let courses = [];
 
   var coursesData = {
     courses: [
@@ -110,9 +155,8 @@ function validateCourseData() {
   };
 
   courses.push(data);
-  console.log(courses);
-  console.log(coursesData);
-
+  // console.log(courses);
+  console.log("-------"+JSON.stringify(coursesData));
 
   // Send the data to the backend using jQuery's $.ajax() function
   $.ajax({
@@ -124,7 +168,7 @@ function validateCourseData() {
     },
     success: function (response) {
       // If the request was successful, do nothing
-      alert("-"+response.errorMessage);
+      alert("-" + response.errorMessage);
     },
     error: function (jqXHR, textStatus, errorThrown) {
       // If there was an error, display the error message in an alert box
@@ -179,13 +223,8 @@ window.onload = function () {
       selectedCoursesDiv.classList.add("full-screen");
     }
 
-    console.log(hashMap);
 
-    const myValuesArray = Object.values(hashMap);
-
-    console.log(myValuesArray);
-
-    // validateCourseData();
+    validateCourseData();
   });
 
   selects.forEach((select) => {
@@ -195,18 +234,12 @@ window.onload = function () {
       select.style.cursor = "pointer";
     }
   });
-  for (var i = 0; i < year.length; i++) {
-    selectminor.options[selectminor.options.length] = new Option(
-      approvedMinor[i],
-      approvedMinor[i]
-    );
+
+  for (const key of approvedMinor.keys()) {
+    console.log(key);
+    selectminor.options[selectminor.options.length] = new Option(key,key);
   }
-  // for (var i = 0; i < year.length; i++) {
-  //   selectYear.options[selectYear.options.length] = new Option(
-  //     year[i],
-  //     year[i]
-  //   );
-  // }
+  
 
   selectminor.onchange = (e) => {
     selectYear.disabled = false;
@@ -227,9 +260,7 @@ window.onload = function () {
       );
     }
 
-    // for (let term in year) {
-    //   selectYear.options[selectYear.options.length] = new Option(term, term);
-    // }
+    
   };
 
   selectYear.onchange = (e) => {
@@ -272,8 +303,6 @@ window.onload = function () {
     fetchData();
   };
 
-  const hashMap = {};
- 
 
   function fetchData() {
     let courses = termDeptInfo[selectTerm.value][selectDept.value];
@@ -282,7 +311,6 @@ window.onload = function () {
     courseListTable.innerHTML = "";
 
     for (const key in courses) {
-
       courseListTable.innerHTML += `
                 <tr>
                     <td class = "course-data">
@@ -310,8 +338,14 @@ window.onload = function () {
           "-" +
           data;
         const coursName = data.split("-")[0];
-
-        const course = CompScicourseData[coursName];
+        var course ;
+        if(selectDept.value.trim().toLowerCase() === COMPUTERSCIENCE.toLowerCase())
+         course = CompScicourseData[coursName];
+         else if(selectDept.value.trim().toLowerCase() === HEALTHCAREADM.toLowerCase()){
+          course = hcaCourseData[coursName];
+         }else if(selectDept.value.trim().toLowerCase() === BUSINESSADM.toLowerCase()){
+          course = busAdmCourseData[coursName];
+         }
         console.log("-----------------");
         console.log(course);
         console.log("-----------------");
@@ -333,7 +367,7 @@ window.onload = function () {
                 </div>
                 <div class="rightCourses">
                 <button   class="addMinusBtn" id = "minusBtn">-</button>
-              <input type="number" id="myTextBox" />
+              <input type="number" id="myTextBox" readonly/>
               <button class="addMinusBtn" id = "plusBtn">+</button>
               <input type="checkbox" class="checkBox" id = "isMathCourse">
               <input type="checkbox" class="checkBox" id = "isMasterCourse">
@@ -357,7 +391,6 @@ window.onload = function () {
   function showData(newRow) {
     const addedCourses = document.querySelectorAll("td.data-row");
     console.log(addedCourses);
-    
 
     // for (i = 0; i < addedCourses.length; i++) {
     var courseName = newRow.querySelector("p"); // Find the element with the specific ID inside the <td> element
@@ -370,33 +403,36 @@ window.onload = function () {
     var mathCourse = newRow.querySelector("#isMathCourse");
     var masterCourse = newRow.querySelector("#isMasterCourse");
 
-
     if (numBox.value.length == 0) {
       numBox.value = hashMap[data].minCredits;
     }
     hashMap[data].isMathCourse = false;
     hashMap[data].isMastersCourse = false;
+    var majorValue= selectminor.value;
+    console.log(majorValue);
+    hashMap[data].area = approvedMinor.get(majorValue);
 
-    console.log("mathcourse"+mathCourse.checked);
+    console.log("mathcourse" + mathCourse.checked);
 
-    mathCourse.addEventListener('change', function() {
+    mathCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
-      console.log("mathcourse"+mathCourse.checked);
+      console.log("mathcourse" + mathCourse.checked);
       hashMap[data].isMathCourse = mathCourse.checked;
-  });
+    });
 
-  masterCourse.addEventListener('change', function() {
-    // do something when the checkbox is checked or unchecked\
-    console.log("mastercourse"+masterCourse.checked);
-    hashMap[data].isMastersCourse = masterCourse.checked;
-
-});
+    masterCourse.addEventListener("change", function () {
+      // do something when the checkbox is checked or unchecked\
+      console.log("mastercourse" + masterCourse.checked);
+      hashMap[data].isMastersCourse = masterCourse.checked;
+    });
 
     deleteBtn.onclick = function () {
       delete hashMap[data];
       const row = deleteBtn.parentNode.parentNode;
       row.remove();
     };
+
+  
 
     addBtn.onclick = function () {
       minValue = hashMap[data].minCredits;
