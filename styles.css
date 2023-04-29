@@ -170,7 +170,6 @@ form select {
 }
 
 .button {
-
   position: absolute;
   left: 50%;
   top: 95%;
@@ -179,7 +178,7 @@ form select {
   height: 50px;
   width: 500px;
   padding: 0;
-  background: #10A37F;
+  background: #10a37f;
   border: none;
   align-items: center;
   outline: none;
@@ -190,6 +189,7 @@ form select {
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
+  text-align: center;
 }
 
 .button:hover {
@@ -207,6 +207,7 @@ form select {
   padding: 0 24px;
   color: #fff;
   height: 100%;
+  text-align: center;
 }
 
 .button__icon {
@@ -222,7 +223,6 @@ form select {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 .right-div {
   margin-top: 1cm;
@@ -232,8 +232,6 @@ form select {
   display: flex;
   justify-content: center;
   align-items: center;
- 
-
 }
 .centered {
   width: 95%;
@@ -247,7 +245,7 @@ form select {
   box-shadow: 0 5px 10px 0 rgb(0, 0, 0, 0.25);
   min-height: 60vh;
   max-height: 60vh; /* Set content height to at least full screen height */
-  cursor: pointer; 
+  cursor: pointer;
   overflow-y: scroll;
 }
 
@@ -271,6 +269,7 @@ form select {
   min-height: 10px;
   border-radius: 100px;
   border: yellow;
+  text-align: center;
 }
 
 #add-btn {
@@ -302,39 +301,34 @@ form select {
   width: 100%;
 }
 
-.table{
+.table {
   overflow-x: auto;
   overflow-y: auto;
-  
 }
 
-#myTextBox{
+#myTextBox {
   width: 50px;
   margin: 10px;
   border-radius: 5px;
   padding: 5px;
-  
 }
 
-#deleteBtn{
-
-
-    margin-left: 10px;
-    height: flex;
-    padding: 10px;
-    background: #e5b941;
-    border: none;
-    align-items: center;
-    outline: none;
-    color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    font-family: "Quicksand", sans-serif;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    justify-content: center;
-
+#deleteBtn {
+  margin-left: 10px;
+  height: flex;
+  padding: 10px;
+  background: #e5b941;
+  border: none;
+  align-items: center;
+  outline: none;
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: "Quicksand", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  justify-content: center;
 }
 
 .addMinusBtn {
@@ -349,14 +343,13 @@ form select {
   cursor: pointer;
 }
 
-.selectcoursesParent{
+.selectcoursesParent {
   justify-content: space-between;
-  width: 100%; 
+  width: 100%;
   flex-direction: row;
   overflow: hidden;
   background-position: center;
   position: relative;
-
 }
 .leftCourses {
   width: 70%;
@@ -367,8 +360,6 @@ form select {
   width: 30%;
   height: fit-content;
   float: right;
-  
-  
 }
 
 .coursesParent {
@@ -388,9 +379,8 @@ form select {
   display: none;
 }
 
-.checkBox{
+.checkBox {
   width: 20px;
   height: 20px;
   background: #323232;
-
 }

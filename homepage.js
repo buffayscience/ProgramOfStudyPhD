@@ -9,9 +9,8 @@ approvedMinor.set("Doctoral Thesis", 6);
 const COMPUTERSCIENCE = "ComputerScience";
 const HEALTHCAREADM = "HeathCareAdministration";
 const BUSINESSADM = "BusinessAdministration";
+const ELECENG = "ElectricalEngineering";
 const hashMap = {};
-
-
 
 const year = ["2015", "2016", "2017", "2018", "2019", "2020"];
 CompScicourseData = new Map();
@@ -51,9 +50,8 @@ class SelectedCourseModel {
     area,
     isMastersCourse,
     isMathCourse,
-    department,
     courseName,
-    courseNumber,
+    courseId,
     courseLevel,
     isUWMCourse,
     credits
@@ -61,9 +59,8 @@ class SelectedCourseModel {
     this.area = area;
     this.isMastersCourse = isMastersCourse;
     this.isMathCourse = isMathCourse;
-    this.department = department;
     this.courseName = courseName;
-    this.courseNumber = courseNumber;
+    this.courseId = courseId;
     this.courseLevel = courseLevel;
     this.isUWMCourse = isUWMCourse;
     this.credits = credits;
@@ -71,23 +68,19 @@ class SelectedCourseModel {
 
   greet() {
     console.log(
-      "${this.area}${this.isMastersCourse}${this.isMathCourse} ${this.department}${this.courseName}${this.courseNumber}${this.courseLevel}${this.isUWMCourse}${this.credits}"
+      "${this.area}${this.isMastersCourse}${this.isMathCourse} ${this.department}${this.courseName}${this.courseId}${this.courseLevel}${this.isUWMCourse}${this.credits}"
     );
   }
 }
 
 function getCourseData() {
-  console.log("test");
   fetch("http://localhost:8080/courses/COMPSCI")
     .then((response) => response.json())
     .then((json) => {
       const courseData = json.data;
       for (let i = 0; i < courseData.length; i++) {
-        CompScicourseData[
-          courseData[i].departmentCode + courseData[i].courseId
-        ] = courseData[i];
+        CompScicourseData[courseData[i].courseId] = courseData[i];
       }
-      //  console.log(CompScicourseData);
     })
     .catch((error) => console.error(error));
 
@@ -96,8 +89,7 @@ function getCourseData() {
     .then((json) => {
       const courseData = json.data;
       for (let i = 0; i < courseData.length; i++) {
-        hcaCourseData[courseData[i].departmentCode + courseData[i].courseId] =
-          courseData[i];
+        hcaCourseData[courseData[i].courseId] = courseData[i];
       }
     })
     .catch((error) => console.error(error));
@@ -107,56 +99,45 @@ function getCourseData() {
     .then((json) => {
       const courseData = json.data;
       for (let i = 0; i < courseData.length; i++) {
-        busAdmCourseData[
-          courseData[i].departmentCode + courseData[i].courseId
-        ] = courseData[i];
+        busAdmCourseData[courseData[i].courseId] = courseData[i];
+      }
+    })
+    .catch((error) => console.error(error));
+
+  fetch("http://localhost:8080/courses/EE")
+    .then((response) => response.json())
+    .then((json) => {
+      const courseData = json.data;
+      for (let i = 0; i < courseData.length; i++) {
+        busAdmCourseData[courseData[i].courseId] = courseData[i];
       }
     })
     .catch((error) => console.error(error));
 }
 
 function validateCourseData() {
-
-  
-  console.log(hashMap);
-
   const myValuesArray = Object.values(hashMap);
-
-  console.log(myValuesArray);
-
-  var data = new SelectedCourseModel(
-    1,
-    true,
-    true,
-    1,
-    "Algorithm design and analysiaas",
-    "CS535",
-    500,
-    true,
-    3
-  );
   let courses = [];
 
-  var coursesData = {
-    courses: [
-      // {
-      //   area: 1,
-      //   isMastersCourse: true,
-      //   isMathCourse: true,
-      //   department: 1,
-      //   courseName: "Algorithm design and analysis",
-      //   courseNumber: "CS535",
-      //   courseLevel: 500,
-      //   isUWMCourse: true,
-      //   credits: 3,
-      // },
-      // Add the rest of the course objects here
-    ],
+  for (const course of myValuesArray) {
+    let data = new SelectedCourseModel(
+      course.area,
+      course.isMastersCourse,
+      course.isMathCourse,
+      course.courseName,
+      course.courseId,
+      course.courseLevel,
+      course.isUWMCourse,
+      course.credits
+    );
+    courses.push(data);
+  }
+
+  let coursesData = {
+    courses: courses,
   };
 
-  courses.push(data);
-  // console.log(courses);
-  console.log("-------"+JSON.stringify(coursesData));
+  console.log(JSON.stringify(coursesData));
 
   // Send the data to the backend using jQuery's $.ajax() function
   $.ajax({
@@ -214,6 +195,7 @@ window.onload = function () {
   selectDept.disabled = true;
   selectTerm.disabled = true;
 
+  const courseListTable = document.getElementById("courseList");
   verifyBtn.addEventListener("click", () => {
     if (coursesDiv.classList.contains("hide")) {
       coursesDiv.classList.remove("hide");
@@ -222,7 +204,6 @@ window.onload = function () {
       coursesDiv.classList.add("hide");
       selectedCoursesDiv.classList.add("full-screen");
     }
-
 
     validateCourseData();
   });
@@ -236,13 +217,13 @@ window.onload = function () {
   });
 
   for (const key of approvedMinor.keys()) {
-    console.log(key);
-    selectminor.options[selectminor.options.length] = new Option(key,key);
+    selectminor.options[selectminor.options.length] = new Option(key, key);
   }
-  
 
   selectminor.onchange = (e) => {
     selectYear.disabled = false;
+    selectTerm.disabled = true;
+    selectDept.disabled = true;
 
     selects.forEach((select) => {
       if (select.disabled == true) {
@@ -252,6 +233,10 @@ window.onload = function () {
       }
     });
     selectYear.length = 1;
+    selectTerm.length = 1;
+    selectDept.length = 1;
+    courseListTable.innerHTML = "";
+
 
     for (var i = 0; i < year.length; i++) {
       selectYear.options[selectYear.options.length] = new Option(
@@ -260,11 +245,11 @@ window.onload = function () {
       );
     }
 
-    
   };
 
   selectYear.onchange = (e) => {
     selectTerm.disabled = false;
+    selectDept.disabled = true;
 
     selects.forEach((select) => {
       if (select.disabled == true) {
@@ -274,6 +259,9 @@ window.onload = function () {
       }
     });
     selectTerm.length = 1;
+    selectDept.length=1;
+    courseListTable.innerHTML = "";
+
 
     for (let term in termDeptInfo) {
       selectTerm.options[selectTerm.options.length] = new Option(term, term);
@@ -292,6 +280,8 @@ window.onload = function () {
     });
 
     selectDept.length = 1;
+    courseListTable.innerHTML = "";
+
 
     for (let dept in termDeptInfo[selectTerm.value]) {
       selectDept.options[selectDept.options.length] = new Option(dept, dept);
@@ -302,7 +292,6 @@ window.onload = function () {
   selectDept.onchange = (e) => {
     fetchData();
   };
-
 
   function fetchData() {
     let courses = termDeptInfo[selectTerm.value][selectDept.value];
@@ -338,22 +327,25 @@ window.onload = function () {
           "-" +
           data;
         const coursName = data.split("-")[0];
-        var course ;
-        if(selectDept.value.trim().toLowerCase() === COMPUTERSCIENCE.toLowerCase())
-         course = CompScicourseData[coursName];
-         else if(selectDept.value.trim().toLowerCase() === HEALTHCAREADM.toLowerCase()){
+        var course;
+        if (
+          selectDept.value.trim().toLowerCase() ===
+          COMPUTERSCIENCE.toLowerCase()
+        )
+          course = CompScicourseData[coursName];
+        else if (
+          selectDept.value.trim().toLowerCase() === HEALTHCAREADM.toLowerCase()
+        ) {
           course = hcaCourseData[coursName];
-         }else if(selectDept.value.trim().toLowerCase() === BUSINESSADM.toLowerCase()){
+        } else if (
+          selectDept.value.trim().toLowerCase() === BUSINESSADM.toLowerCase()
+        ) {
           course = busAdmCourseData[coursName];
-         }
-        console.log("-----------------");
-        console.log(course);
-        console.log("-----------------");
+        }
 
         if (!hashMap.hasOwnProperty(termData)) {
           hashMap[termData] = course;
           hashMap[termData].credits = hashMap[termData].minCredits;
-          console.log(hashMap);
 
           const newRow = document.createElement("tr");
 
@@ -390,7 +382,6 @@ window.onload = function () {
 
   function showData(newRow) {
     const addedCourses = document.querySelectorAll("td.data-row");
-    console.log(addedCourses);
 
     // for (i = 0; i < addedCourses.length; i++) {
     var courseName = newRow.querySelector("p"); // Find the element with the specific ID inside the <td> element
@@ -408,21 +399,17 @@ window.onload = function () {
     }
     hashMap[data].isMathCourse = false;
     hashMap[data].isMastersCourse = false;
-    var majorValue= selectminor.value;
-    console.log(majorValue);
+    var majorValue = selectminor.value;
     hashMap[data].area = approvedMinor.get(majorValue);
-
-    console.log("mathcourse" + mathCourse.checked);
+    console.log(hashMap[data].area);
 
     mathCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
-      console.log("mathcourse" + mathCourse.checked);
       hashMap[data].isMathCourse = mathCourse.checked;
     });
 
     masterCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
-      console.log("mastercourse" + masterCourse.checked);
       hashMap[data].isMastersCourse = masterCourse.checked;
     });
 
@@ -432,16 +419,12 @@ window.onload = function () {
       row.remove();
     };
 
-  
-
     addBtn.onclick = function () {
       minValue = hashMap[data].minCredits;
       maxValue = hashMap[data].maxCredits;
       if (numBox.value < maxValue) {
         numBox.value = parseInt(numBox.value) + 1;
         hashMap[data].credits = parseInt(numBox.value);
-        console.log("-------" + hashMap[data].credits);
-        console.log(hashMap);
       }
     };
 
@@ -451,8 +434,6 @@ window.onload = function () {
       if (numBox.value > minValue) {
         numBox.value = parseInt(numBox.value) - 1;
         hashMap[data].credits = parseInt(numBox.value);
-        console.log("-------" + hashMap[data].credits);
-        console.log(hashMap);
       }
     };
 
