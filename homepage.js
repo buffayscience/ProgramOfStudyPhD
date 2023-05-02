@@ -10,7 +10,7 @@ const COMPUTERSCIENCE = "ComputerScience";
 const HEALTHCAREADM = "HeathCareAdministration";
 const BUSINESSADM = "BusinessAdministration";
 const ELECENG = "ElectricalEngineering";
-const hashMap = {};
+hashMap = new Map();
 
 const year = ["2010", "2011", "2012", "2013", "2014","2015", "2016", "2017", "2018", "2019", "2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"];
 CompScicourseData = new Map();
@@ -332,8 +332,8 @@ window.onload = function () {
       const addBtn = tdata.querySelector("button");
 
       addBtn.addEventListener("click", () => {
-        const data = courseName.innerText; // Get the text content of the <td> element
-        const termData =
+        var data = courseName.innerText; // Get the text content of the <td> element
+        var termData =
           selectminor.value +
           "-" +
           selectYear.value +
@@ -341,7 +341,7 @@ window.onload = function () {
           selectTerm.value +
           "-" +
           data;
-        const coursName = data.split("-")[0];
+        var coursName = data.split("-")[0];
         var course;
         if (
           selectDept.value.trim().toLowerCase() ===
@@ -363,14 +363,17 @@ window.onload = function () {
           course = electricalEnggData[coursName];
         }
 
-        if (!hashMap.hasOwnProperty(termData)) {
-          hashMap[termData] = course;
-          hashMap[termData].credits = hashMap[termData].minCredits;
-          hashMap[termData].year = selectYear.value;
-          hashMap[termData].term = selectTerm.value;
+        if (!hashMap.has(termData)) {
+          // hashMap.get(termData) = course;
+          hashMap.set(termData,course);
+          console.log("---------------");
+          console.log(hashMap.get(termData));
+          hashMap.get(termData).credits = hashMap.get(termData).minCredits;
+          hashMap.get(termData).year = selectYear.value;
+          hashMap.get(termData).term = selectTerm.value;
           var majorValue = selectminor.value;
-          hashMap[termData].area = approvedMinor.get(majorValue);
-          console.log(hashMap[termData].area);
+          hashMap.get(termData).area = approvedMinor.get(majorValue);
+          console.log(hashMap.get(termData).area);
 
           const newRow = document.createElement("tr");
 
@@ -401,6 +404,8 @@ window.onload = function () {
         } else {
           alert(termData + "is already present");
         }
+        course  = null;
+        termData  = null;
       });
     });
   }
@@ -420,14 +425,13 @@ window.onload = function () {
     var masterCourse = newRow.querySelector("#isMasterCourse");
 
     if (numBox.value.length == 0) {
-      numBox.value = hashMap[data].minCredits;
+      numBox.value = hashMap.get(data).minCredits;
     }
-    hashMap[data].isMathCourse = false;
-    hashMap[data].isMastersCourse = false;
+    hashMap.get(data).isMathCourse = false;
+    hashMap.get(data).isMastersCourse = false;
    
     console.log("hashmap");
     console.log("data"+data);
-    console.log("value"+hashMap[data].greet());
     const map = new Map(Object.entries(hashMap));
 
     for (const [key, value] of map) {
@@ -436,35 +440,35 @@ window.onload = function () {
 
     mathCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
-      hashMap[data].isMathCourse = mathCourse.checked;
+      hashMap.get(data).isMathCourse = mathCourse.checked;
     });
 
     masterCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
-      hashMap[data].isMastersCourse = masterCourse.checked;
+      hashMap.get(data).isMastersCourse = masterCourse.checked;
     });
 
     deleteBtn.onclick = function () {
-      delete hashMap[data];
+      delete hashMap.get(data);
       const row = deleteBtn.parentNode.parentNode;
       row.remove();
     };
 
     addBtn.onclick = function () {
-      minValue = hashMap[data].minCredits;
-      maxValue = hashMap[data].maxCredits;
+      minValue = hashMap.get(data).minCredits;
+      maxValue = hashMap.get(data).maxCredits;
       if (numBox.value < maxValue) {
         numBox.value = parseInt(numBox.value) + 1;
-        hashMap[data].credits = parseInt(numBox.value);
+        hashMap.get(data).credits = parseInt(numBox.value);
       }
     };
 
     minusBtn.onclick = function () {
-      minValue = hashMap[data].minCredits;
-      maxValue = hashMap[data].maxCredits;
+      minValue = hashMap.get(data).minCredits;
+      maxValue = hashMap.get(data).maxCredits;
       if (numBox.value > minValue) {
         numBox.value = parseInt(numBox.value) - 1;
-        hashMap[data].credits = parseInt(numBox.value);
+        hashMap.get(da).credits = parseInt(numBox.value);
       }
     };
 
