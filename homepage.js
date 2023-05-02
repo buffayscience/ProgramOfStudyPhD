@@ -12,10 +12,11 @@ const BUSINESSADM = "BusinessAdministration";
 const ELECENG = "ElectricalEngineering";
 const hashMap = {};
 
-const year = ["2015", "2016", "2017", "2018", "2019", "2020"];
+const year = ["2010", "2011", "2012", "2013", "2014","2015", "2016", "2017", "2018", "2019", "2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"];
 CompScicourseData = new Map();
 hcaCourseData = new Map();
 busAdmCourseData = new Map();
+electricalEnggData = new Map();
 
 class CourseModel {
   constructor(
@@ -54,7 +55,9 @@ class SelectedCourseModel {
     courseId,
     courseLevel,
     isUWMCourse,
-    credits
+    credits,
+    year,
+    term
   ) {
     this.area = area;
     this.isMastersCourse = isMastersCourse;
@@ -64,6 +67,8 @@ class SelectedCourseModel {
     this.courseLevel = courseLevel;
     this.isUWMCourse = isUWMCourse;
     this.credits = credits;
+    this.year = year;
+    this.term = term;
   }
 
   greet() {
@@ -104,18 +109,20 @@ function getCourseData() {
     })
     .catch((error) => console.error(error));
 
-  fetch("http://localhost:8080/courses/EE")
+  fetch("http://localhost:8080/courses/ELECENG")
     .then((response) => response.json())
     .then((json) => {
       const courseData = json.data;
       for (let i = 0; i < courseData.length; i++) {
-        busAdmCourseData[courseData[i].courseId] = courseData[i];
+        electricalEnggData[courseData[i].courseId] = courseData[i];
       }
     })
     .catch((error) => console.error(error));
 }
 
 function validateCourseData() {
+  console.log(hashMap);
+ 
   const myValuesArray = Object.values(hashMap);
   let courses = [];
 
@@ -128,7 +135,9 @@ function validateCourseData() {
       course.courseId,
       course.courseLevel,
       course.isUWMCourse,
-      course.credits
+      course.credits,
+      course.year,
+      course.term
     );
     courses.push(data);
   }
@@ -156,6 +165,7 @@ function validateCourseData() {
       alert("Error: " + textStatus + " - " + errorThrown);
     },
   });
+
 }
 
 getCourseData();
@@ -165,17 +175,22 @@ var termDeptInfo = {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
     BusinessAdministration: busAdmCourseData,
+    ElectricalEngineering:electricalEnggData,
   },
   Fall: {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
     BusinessAdministration: busAdmCourseData,
+    ElectricalEngineering:electricalEnggData,
+
   },
 
   Summer: {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
     BusinessAdministration: busAdmCourseData,
+    ElectricalEngineering:electricalEnggData,
+
   },
 };
 
@@ -197,13 +212,13 @@ window.onload = function () {
 
   const courseListTable = document.getElementById("courseList");
   verifyBtn.addEventListener("click", () => {
-    if (coursesDiv.classList.contains("hide")) {
-      coursesDiv.classList.remove("hide");
-      selectedCoursesDiv.classList.remove("full-screen");
-    } else {
-      coursesDiv.classList.add("hide");
-      selectedCoursesDiv.classList.add("full-screen");
-    }
+    // if (coursesDiv.classList.contains("hide")) {
+    //   coursesDiv.classList.remove("hide");
+    //   selectedCoursesDiv.classList.remove("full-screen");
+    // } else {
+    //   coursesDiv.classList.add("hide");
+    //   selectedCoursesDiv.classList.add("full-screen");
+    // }
 
     validateCourseData();
   });
@@ -342,10 +357,20 @@ window.onload = function () {
         ) {
           course = busAdmCourseData[coursName];
         }
+        else if (
+          selectDept.value.trim().toLowerCase() === ELECENG.toLowerCase()
+        ) {
+          course = electricalEnggData[coursName];
+        }
 
         if (!hashMap.hasOwnProperty(termData)) {
           hashMap[termData] = course;
           hashMap[termData].credits = hashMap[termData].minCredits;
+          hashMap[termData].year = selectYear.value;
+          hashMap[termData].term = selectTerm.value;
+          var majorValue = selectminor.value;
+          hashMap[termData].area = approvedMinor.get(majorValue);
+          console.log(hashMap[termData].area);
 
           const newRow = document.createElement("tr");
 
@@ -399,9 +424,14 @@ window.onload = function () {
     }
     hashMap[data].isMathCourse = false;
     hashMap[data].isMastersCourse = false;
-    var majorValue = selectminor.value;
-    hashMap[data].area = approvedMinor.get(majorValue);
-    console.log(hashMap[data].area);
+   
+    console.log("hashmap");
+    console.log("data"+data);
+    const map = new Map(Object.entries(hashMap));
+
+    for (const [key, value] of map) {
+      console.log(key, value);
+    }
 
     mathCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
