@@ -427,6 +427,7 @@ window.onload = function () {
    
     console.log("hashmap");
     console.log("data"+data);
+    console.log("value"+hashMap[data].greet());
     const map = new Map(Object.entries(hashMap));
 
     for (const [key, value] of map) {
