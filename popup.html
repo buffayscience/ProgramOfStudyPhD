@@ -8,22 +8,32 @@
     <link rel="stylesheet" href="popupstyles.css">
 </head>
 <body>
+    
 
     <script>
-        let popup = document.getElementById("popup");
+        
 
         function openPopup(){
-            popup.classList.add("open-popup");
+
+        let popupdiv = document.querySelector(".popup");
+        console.log(popupdiv)
+            console.log("test");
+            popupdiv.classList.add("openpopup");
         }
         function closePopup(){
-            popup.classList.remove("open-popup");
+            let popupdiv = document.querySelector(".popup");
+        console.log(popupdiv)
+            popupdiv.classList.remove("openpopup");
         }
+        function functiontest() {
+        console.log("test");
+      }
 
     </script>
 
     <div class="container">
         <button onclick="openPopup()" type="submit" class="btn" >Submit</button>
-        <div class="popup"  id  = "popup">
+        <div class="popup"  id  = "popupid">
             <img  src="images/tick.png">
             <h2>Success!!!!</h2>
             <p> Your Program of Study fulfils all requirements!!</p>

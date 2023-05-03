@@ -12,7 +12,29 @@ const BUSINESSADM = "BusinessAdministration";
 const ELECENG = "ElectricalEngineering";
 hashMap = new Map();
 
-const year = ["2010", "2011", "2012", "2013", "2014","2015", "2016", "2017", "2018", "2019", "2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"];
+const year = [
+  "2010",
+  "2011",
+  "2012",
+  "2013",
+  "2014",
+  "2015",
+  "2016",
+  "2017",
+  "2018",
+  "2019",
+  "2020",
+  "2021",
+  "2022",
+  "2023",
+  "2024",
+  "2025",
+  "2026",
+  "2027",
+  "2028",
+  "2029",
+  "2030",
+];
 CompScicourseData = new Map();
 hcaCourseData = new Map();
 busAdmCourseData = new Map();
@@ -57,8 +79,7 @@ class SelectedCourseModel {
     credits,
     year,
     term,
-    isUWMCourse,
-
+    isUWMCourse
   ) {
     this.area = area;
     this.isMastersCourse = isMastersCourse;
@@ -122,17 +143,36 @@ function getCourseData() {
     .catch((error) => console.error(error));
 }
 
+function openPopup() {
+  let popupdiv = document.querySelector(".popup");
+  console.log(popupdiv);
+  console.log("test");
+  popupdiv.classList.add("openpopup");
+}
+function closePopup() {
+  let popupdiv = document.querySelector(".popup");
+  console.log(popupdiv);
+  popupdiv.classList.remove("openpopup");
+}
+function functiontest() {
+  console.log("test");
+}
+
 function validateCourseData() {
+  errorMessage = document.getElementById("errorMessage");
+  errorMessage.textContent = "";
+    statusImg = document.getElementById("statusImg");
+  popupHeading = document.getElementById("popupHeading");
+
   console.log(hashMap);
- 
+
   const myValuesArray = Object.values(hashMap);
-  
+
   console.log(myValuesArray);
-  
+
   let coursesArray = [];
 
   let valuesList = Array.from(hashMap.values()); // Get the list of values from the Map
-
 
   for (const course of valuesList) {
     let data = new SelectedCourseModel(
@@ -146,7 +186,6 @@ function validateCourseData() {
       course.year,
       course.term,
       course.isUWMCourse
-
     );
     console.log("***************");
     console.log(data);
@@ -154,7 +193,7 @@ function validateCourseData() {
 
     coursesArray.push(data);
   }
-  console.log(coursesArray)
+  console.log(coursesArray);
 
   let coursesData = {
     courses: coursesArray,
@@ -172,14 +211,31 @@ function validateCourseData() {
     },
     success: function (response) {
       // If the request was successful, do nothing
-      alert("-" + response.errorMessage);
+      // alert("-" + response.errorMessage);
+      if (response.statusCode == 200) {
+        statusImg.src = "images/tick.png";
+        popupHeading.textContent = "Success!!";
+      } else {
+        statusImg.src = "images/fail.png";
+        popupHeading.textContent = "";
+      }
+      const lines = response.errorMessage.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        const textNode = document.createTextNode(lines[i]);
+        errorMessage.appendChild(textNode);
+        errorMessage.appendChild(document.createElement("br"));
+        // errorMessage.textContent += lines[i] + "\n\n";
+      }
+      // errorMessage.textContent = response.errorMessage;
+      openPopup();
     },
     error: function (jqXHR, textStatus, errorThrown) {
       // If there was an error, display the error message in an alert box
-      alert("Error: " + textStatus + " - " + errorThrown);
+      // alert("Error: " + textStatus + " - " + errorThrown);
+      errorMessage.textContent = response.errorMessage;
+      openPopup();
     },
   });
-
 }
 
 getCourseData();
@@ -189,22 +245,20 @@ var termDeptInfo = {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
     BusinessAdministration: busAdmCourseData,
-    ElectricalEngineering:electricalEnggData,
+    ElectricalEngineering: electricalEnggData,
   },
   Fall: {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
     BusinessAdministration: busAdmCourseData,
-    ElectricalEngineering:electricalEnggData,
-
+    ElectricalEngineering: electricalEnggData,
   },
 
   Summer: {
     ComputerScience: CompScicourseData,
     HeathCareAdministration: hcaCourseData,
     BusinessAdministration: busAdmCourseData,
-    ElectricalEngineering:electricalEnggData,
-
+    ElectricalEngineering: electricalEnggData,
   },
 };
 
@@ -233,7 +287,6 @@ window.onload = function () {
     //   coursesDiv.classList.add("hide");
     //   selectedCoursesDiv.classList.add("full-screen");
     // }
-
     validateCourseData();
   });
 
@@ -266,14 +319,12 @@ window.onload = function () {
     selectDept.length = 1;
     courseListTable.innerHTML = "";
 
-
     for (var i = 0; i < year.length; i++) {
       selectYear.options[selectYear.options.length] = new Option(
         year[i],
         year[i]
       );
     }
-
   };
 
   selectYear.onchange = (e) => {
@@ -288,9 +339,8 @@ window.onload = function () {
       }
     });
     selectTerm.length = 1;
-    selectDept.length=1;
+    selectDept.length = 1;
     courseListTable.innerHTML = "";
-
 
     for (let term in termDeptInfo) {
       selectTerm.options[selectTerm.options.length] = new Option(term, term);
@@ -310,7 +360,6 @@ window.onload = function () {
 
     selectDept.length = 1;
     courseListTable.innerHTML = "";
-
 
     for (let dept in termDeptInfo[selectTerm.value]) {
       selectDept.options[selectDept.options.length] = new Option(dept, dept);
@@ -370,31 +419,42 @@ window.onload = function () {
           selectDept.value.trim().toLowerCase() === BUSINESSADM.toLowerCase()
         ) {
           course = busAdmCourseData[coursName];
-        }
-        else if (
+        } else if (
           selectDept.value.trim().toLowerCase() === ELECENG.toLowerCase()
         ) {
           course = electricalEnggData[coursName];
         }
 
         if (!hashMap.has(termData)) {
-          hashMap.set(termData,course);
+          hashMap.set(termData, course);
           console.log("---------------");
           console.log(hashMap.get(termData));
           // hashMap.get(termData).credits = hashMap.get(termData).minCredits;
-          hashMap.set(termData, { ...hashMap.get(termData), credits: hashMap.get(termData).minCredits });
-          hashMap.set(termData, { ...hashMap.get(termData),year:selectYear.value});
-          hashMap.set(termData, { ...hashMap.get(termData),term:selectTerm.value});
+          hashMap.set(termData, {
+            ...hashMap.get(termData),
+            credits: hashMap.get(termData).minCredits,
+          });
+          hashMap.set(termData, {
+            ...hashMap.get(termData),
+            year: selectYear.value,
+          });
+          hashMap.set(termData, {
+            ...hashMap.get(termData),
+            term: selectTerm.value,
+          });
           var majorValue = selectminor.value;
-          hashMap.set(termData, { ...hashMap.get(termData),area:approvedMinor.get(majorValue)});
+          hashMap.set(termData, {
+            ...hashMap.get(termData),
+            area: approvedMinor.get(majorValue),
+          });
           console.log(hashMap.get(termData).area);
 
-          hashMap.set(termData, { ...hashMap.get(termData),isMastersCourse:0});
-          hashMap.set(termData, { ...hashMap.get(termData),isMathCourse:0});
-          hashMap.set(termData, { ...hashMap.get(termData),isUWMCourse:0});
-
-
-
+          hashMap.set(termData, {
+            ...hashMap.get(termData),
+            isMastersCourse: 0,
+          });
+          hashMap.set(termData, { ...hashMap.get(termData), isMathCourse: 0 });
+          hashMap.set(termData, { ...hashMap.get(termData), isUWMCourse: 0 });
 
           const newRow = document.createElement("tr");
 
@@ -425,8 +485,8 @@ window.onload = function () {
         } else {
           alert(termData + "is already present");
         }
-        course  = null;
-        termData  = null;
+        course = null;
+        termData = null;
       });
     });
   }
@@ -451,9 +511,9 @@ window.onload = function () {
 
     // hashMap.get(data).isMathCourse = false;
     // hashMap.get(data).isMastersCourse = false;
-   
+
     console.log("hashmap");
-    console.log("data"+data);
+    console.log("data" + data);
     const map = new Map(Object.entries(hashMap));
 
     for (const [key, value] of map) {
@@ -464,26 +524,25 @@ window.onload = function () {
       // do something when the checkbox is checked or unchecked\
       // hashMap.get(data).isMathCourse = mathCourse.checked;
       var isChecked;
-      if(mathCourse.checked){
-        isChecked =1;
-      }else{
-        isChecked=0;
+      if (mathCourse.checked) {
+        isChecked = 1;
+      } else {
+        isChecked = 0;
       }
 
-      hashMap.set(data, { ...hashMap.get(data),isMathCourse:isChecked});
+      hashMap.set(data, { ...hashMap.get(data), isMathCourse: isChecked });
     });
 
     masterCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
       // hashMap.get(data).isMastersCourse = masterCourse.checked;
       var isChecked;
-      if(masterCourse.checked){
-        isChecked =1;
-      }else{
-        isChecked=0;
+      if (masterCourse.checked) {
+        isChecked = 1;
+      } else {
+        isChecked = 0;
       }
-      hashMap.set(data, { ...hashMap.get(data),isMastersCourse: isChecked});
-
+      hashMap.set(data, { ...hashMap.get(data), isMastersCourse: isChecked });
     });
 
     deleteBtn.onclick = function () {
@@ -501,7 +560,10 @@ window.onload = function () {
         // hashMap.get(data).credits = parseInt(numBox.value);
 
         // const test1 = parseInt(numBox.value);
-        hashMap.set(data, { ...hashMap.get(data), credits: parseInt(numBox.value) });
+        hashMap.set(data, {
+          ...hashMap.get(data),
+          credits: parseInt(numBox.value),
+        });
       }
     };
 
@@ -511,8 +573,10 @@ window.onload = function () {
       if (numBox.value > minValue) {
         numBox.value = parseInt(numBox.value) - 1;
         // hashMap.get(da).credits = parseInt(numBox.value);
-        hashMap.set(data, { ...hashMap.get(data), credits: parseInt(numBox.value) });
-
+        hashMap.set(data, {
+          ...hashMap.get(data),
+          credits: parseInt(numBox.value),
+        });
       }
     };
 
