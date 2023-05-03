@@ -54,10 +54,11 @@ class SelectedCourseModel {
     courseName,
     courseId,
     courseLevel,
-    isUWMCourse,
     credits,
     year,
-    term
+    term,
+    isUWMCourse,
+
   ) {
     this.area = area;
     this.isMastersCourse = isMastersCourse;
@@ -69,6 +70,7 @@ class SelectedCourseModel {
     this.credits = credits;
     this.year = year;
     this.term = term;
+    this.isUWMCourse = isUWMCourse;
   }
 
   greet() {
@@ -124,9 +126,15 @@ function validateCourseData() {
   console.log(hashMap);
  
   const myValuesArray = Object.values(hashMap);
-  let courses = [];
+  
+  console.log(myValuesArray);
+  
+  let coursesArray = [];
 
-  for (const course of myValuesArray) {
+  let valuesList = Array.from(hashMap.values()); // Get the list of values from the Map
+
+
+  for (const course of valuesList) {
     let data = new SelectedCourseModel(
       course.area,
       course.isMastersCourse,
@@ -134,16 +142,22 @@ function validateCourseData() {
       course.courseName,
       course.courseId,
       course.courseLevel,
-      course.isUWMCourse,
       course.credits,
       course.year,
-      course.term
+      course.term,
+      course.isUWMCourse
+
     );
-    courses.push(data);
+    console.log("***************");
+    console.log(data);
+    console.log("***************");
+
+    coursesArray.push(data);
   }
+  console.log(coursesArray)
 
   let coursesData = {
-    courses: courses,
+    courses: coursesArray,
   };
 
   console.log(JSON.stringify(coursesData));
@@ -364,16 +378,23 @@ window.onload = function () {
         }
 
         if (!hashMap.has(termData)) {
-          // hashMap.get(termData) = course;
           hashMap.set(termData,course);
           console.log("---------------");
           console.log(hashMap.get(termData));
-          hashMap.get(termData).credits = hashMap.get(termData).minCredits;
-          hashMap.get(termData).year = selectYear.value;
-          hashMap.get(termData).term = selectTerm.value;
+          // hashMap.get(termData).credits = hashMap.get(termData).minCredits;
+          hashMap.set(termData, { ...hashMap.get(termData), credits: hashMap.get(termData).minCredits });
+          hashMap.set(termData, { ...hashMap.get(termData),year:selectYear.value});
+          hashMap.set(termData, { ...hashMap.get(termData),term:selectTerm.value});
           var majorValue = selectminor.value;
-          hashMap.get(termData).area = approvedMinor.get(majorValue);
+          hashMap.set(termData, { ...hashMap.get(termData),area:approvedMinor.get(majorValue)});
           console.log(hashMap.get(termData).area);
+
+          hashMap.set(termData, { ...hashMap.get(termData),isMastersCourse:0});
+          hashMap.set(termData, { ...hashMap.get(termData),isMathCourse:0});
+          hashMap.set(termData, { ...hashMap.get(termData),isUWMCourse:0});
+
+
+
 
           const newRow = document.createElement("tr");
 
@@ -427,8 +448,9 @@ window.onload = function () {
     if (numBox.value.length == 0) {
       numBox.value = hashMap.get(data).minCredits;
     }
-    hashMap.get(data).isMathCourse = false;
-    hashMap.get(data).isMastersCourse = false;
+
+    // hashMap.get(data).isMathCourse = false;
+    // hashMap.get(data).isMastersCourse = false;
    
     console.log("hashmap");
     console.log("data"+data);
@@ -440,16 +462,33 @@ window.onload = function () {
 
     mathCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
-      hashMap.get(data).isMathCourse = mathCourse.checked;
+      // hashMap.get(data).isMathCourse = mathCourse.checked;
+      var isChecked;
+      if(mathCourse.checked){
+        isChecked =1;
+      }else{
+        isChecked=0;
+      }
+
+      hashMap.set(data, { ...hashMap.get(data),isMathCourse:isChecked});
     });
 
     masterCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
-      hashMap.get(data).isMastersCourse = masterCourse.checked;
+      // hashMap.get(data).isMastersCourse = masterCourse.checked;
+      var isChecked;
+      if(masterCourse.checked){
+        isChecked =1;
+      }else{
+        isChecked=0;
+      }
+      hashMap.set(data, { ...hashMap.get(data),isMastersCourse: isChecked});
+
     });
 
     deleteBtn.onclick = function () {
-      delete hashMap.get(data);
+      // delete hashMap.get(data);
+      hashMap.delete(data);
       const row = deleteBtn.parentNode.parentNode;
       row.remove();
     };
@@ -459,7 +498,10 @@ window.onload = function () {
       maxValue = hashMap.get(data).maxCredits;
       if (numBox.value < maxValue) {
         numBox.value = parseInt(numBox.value) + 1;
-        hashMap.get(data).credits = parseInt(numBox.value);
+        // hashMap.get(data).credits = parseInt(numBox.value);
+
+        // const test1 = parseInt(numBox.value);
+        hashMap.set(data, { ...hashMap.get(data), credits: parseInt(numBox.value) });
       }
     };
 
@@ -468,7 +510,9 @@ window.onload = function () {
       maxValue = hashMap.get(data).maxCredits;
       if (numBox.value > minValue) {
         numBox.value = parseInt(numBox.value) - 1;
-        hashMap.get(da).credits = parseInt(numBox.value);
+        // hashMap.get(da).credits = parseInt(numBox.value);
+        hashMap.set(data, { ...hashMap.get(data), credits: parseInt(numBox.value) });
+
       }
     };
 

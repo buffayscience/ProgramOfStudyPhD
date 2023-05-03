@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="popupstyles.css">
+</head>
+<body>
+
+    <script>
+        let popup = document.getElementById("popup");
+
+        function openPopup(){
+            popup.classList.add("open-popup");
+        }
+        function closePopup(){
+            popup.classList.remove("open-popup");
+        }
+
+    </script>
+
+    <div class="container">
+        <button onclick="openPopup()" type="submit" class="btn" >Submit</button>
+        <div class="popup"  id  = "popup">
+            <img  src="images/tick.png">
+            <h2>Success!!!!</h2>
+            <p> Your Program of Study fulfils all requirements!!</p>
+            <button type="button" onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+
+   
+    
+</body>
+</html>

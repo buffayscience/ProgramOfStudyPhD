@@ -1,0 +1,30 @@
+/* Style for the form container */
+form {
+  max-width: 600px;
+  margin: auto;
+  border: 2px solid 2a2f3b;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+/* Style for the form rows */
+.form-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Style for the form labels */
+label {
+  width: 150px;
+  text-align: right;
+  margin-right: 10px;
+}
+
+
+
+
+
+
