@@ -399,13 +399,18 @@ form select {
   color: #333;
   visibility: hidden;
   transition: transform 0.4s,top 0.4s ;
+  opacity: 1; /* Set the opacity to 1 */
+  z-index: 9999;
+
+
 }
 
 .openpopup{
   visibility: visible;
   top: 50%;
   transform: translate(-50%,-50%) scale(1);
-
+  opacity: 1; /* Set the opacity to 1 */
+  z-index: 9999;
 
 }
 
@@ -429,6 +434,25 @@ form select {
   font-size: 16px;
 
   
+
+}
+.verifyButton{
+  width: 30%;
+  margin-left: 30%;
+  margin-top: 20px;
+  padding: 10px 0 ;
+  background: #10a37f;
+  color: #fff;
+  border: 0;
+  outline: none;
+  font-size: 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow:0 2px 5px rgba(0, 0, 0, 0.2) ;
+  border-radius: 5px;
+  display: inline-block;
+
+
 
 }
 

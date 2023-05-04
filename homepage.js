@@ -101,6 +101,8 @@ class SelectedCourseModel {
   }
 }
 
+
+
 function getCourseData() {
   fetch("http://localhost:8080/courses/COMPSCI")
     .then((response) => response.json())
@@ -280,15 +282,16 @@ window.onload = function () {
 
   const courseListTable = document.getElementById("courseList");
   verifyBtn.addEventListener("click", () => {
-    // if (coursesDiv.classList.contains("hide")) {
-    //   coursesDiv.classList.remove("hide");
-    //   selectedCoursesDiv.classList.remove("full-screen");
-    // } else {
-    //   coursesDiv.classList.add("hide");
-    //   selectedCoursesDiv.classList.add("full-screen");
-    // }
     validateCourseData();
   });
+
+
+  const urlParams = new URLSearchParams(window.location.search);
+const objectString = urlParams.get("object");
+const myObject = JSON.parse(objectString);
+
+// Use the object
+console.log(myObject);
 
   selects.forEach((select) => {
     if (select.disabled == true) {
