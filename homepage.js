@@ -6,6 +6,15 @@ approvedMinor.set("Math/Quantitative Methods", 4);
 approvedMinor.set("Other Courses", 5);
 approvedMinor.set("Doctoral Thesis", 6);
 
+let areaType = new Map();
+areaType.set(1,"Major");
+areaType.set( 2,"Minor");
+areaType.set( 3,"Approved Elec");
+areaType.set( 4,"Math/Quant");
+areaType.set( 5,"Other Courses");
+areaType.set(6,"Doc Thesis");
+
+
 const COMPUTERSCIENCE = "ComputerScience";
 const HEALTHCAREADM = "HeathCareAdministration";
 const BUSINESSADM = "BusinessAdministration";
@@ -101,8 +110,6 @@ class SelectedCourseModel {
   }
 }
 
-
-
 function getCourseData() {
   fetch("http://localhost:8080/courses/COMPSCI")
     .then((response) => response.json())
@@ -147,23 +154,22 @@ function getCourseData() {
 
 function openPopup() {
   let popupdiv = document.querySelector(".popup");
-  console.log(popupdiv);
-  console.log("test");
+
   popupdiv.classList.add("openpopup");
 }
 function closePopup() {
   let popupdiv = document.querySelector(".popup");
-  console.log(popupdiv);
   popupdiv.classList.remove("openpopup");
-}
-function functiontest() {
-  console.log("test");
 }
 
 function validateCourseData() {
+  const downloadBtn = document.getElementById('downloadPDF');
+  const popupokbtn = document.getElementById('popupBtn');
+
+
   errorMessage = document.getElementById("errorMessage");
   errorMessage.textContent = "";
-    statusImg = document.getElementById("statusImg");
+  statusImg = document.getElementById("statusImg");
   popupHeading = document.getElementById("popupHeading");
 
   console.log(hashMap);
@@ -216,10 +222,17 @@ function validateCourseData() {
       // alert("-" + response.errorMessage);
       if (response.statusCode == 200) {
         statusImg.src = "images/tick.png";
-        popupHeading.textContent = "Success!!";
+        popupHeading.textContent = "Success";
+        downloadBtn.style.display = 'block';
+        popupokbtn.style.display = 'none';
+
       } else {
         statusImg.src = "images/fail.png";
         popupHeading.textContent = "";
+        downloadBtn.style.display = 'none';
+        popupokbtn.style.display = 'block';
+
+
       }
       const lines = response.errorMessage.split("\n");
       for (let i = 0; i < lines.length; i++) {
@@ -274,6 +287,8 @@ window.onload = function () {
   coursesDiv = document.querySelector(".left-div");
   selectedCoursesDiv = document.querySelector(".right-div");
 
+  var studentData = localStorage.getItem("studentData");
+
   const courseListAddedTable = document.getElementById("courseListAdded");
   courseListAddedTable.innerHTML = ``;
   selectYear.disabled = true;
@@ -285,13 +300,12 @@ window.onload = function () {
     validateCourseData();
   });
 
-
   const urlParams = new URLSearchParams(window.location.search);
-const objectString = urlParams.get("object");
-const myObject = JSON.parse(objectString);
+  const objectString = urlParams.get("object");
+  const myObject = JSON.parse(objectString);
 
-// Use the object
-console.log(myObject);
+  // Use the object
+  console.log(myObject);
 
   selects.forEach((select) => {
     if (select.disabled == true) {
@@ -430,8 +444,7 @@ console.log(myObject);
 
         if (!hashMap.has(termData)) {
           hashMap.set(termData, course);
-          console.log("---------------");
-          console.log(hashMap.get(termData));
+      
           // hashMap.get(termData).credits = hashMap.get(termData).minCredits;
           hashMap.set(termData, {
             ...hashMap.get(termData),
@@ -450,7 +463,6 @@ console.log(myObject);
             ...hashMap.get(termData),
             area: approvedMinor.get(majorValue),
           });
-          console.log(hashMap.get(termData).area);
 
           hashMap.set(termData, {
             ...hashMap.get(termData),
@@ -515,14 +527,7 @@ console.log(myObject);
     // hashMap.get(data).isMathCourse = false;
     // hashMap.get(data).isMastersCourse = false;
 
-    console.log("hashmap");
-    console.log("data" + data);
-    const map = new Map(Object.entries(hashMap));
-
-    for (const [key, value] of map) {
-      console.log(key, value);
-    }
-
+   
     mathCourse.addEventListener("change", function () {
       // do something when the checkbox is checked or unchecked\
       // hashMap.get(data).isMathCourse = mathCourse.checked;
@@ -593,6 +598,194 @@ console.log(myObject);
       }
     });
   }
-  // }
+
   fetchData();
 };
+
+function generatePDF() {
+  var majorCourses = [];
+
+
+  let valuesList = Array.from(hashMap.values()); // Get the list of values from the Map
+
+  for (const course of valuesList) {
+      majorCourses.push(course);
+
+  }
+  console.log("*****major*********");
+  console.log(majorCourses);
+
+
+
+var namevalue =  localStorage.getItem("studentName");
+
+  var props = {
+    outputType: jsPDFInvoiceTemplate.OutputType.Save,
+    returnJsPDFDocObject: true,
+    fileName: namevalue + "_POS",
+    orientationLandscape: false,
+    compress: true,
+    logo: {
+      src: "images/uwmIcon.jpg",
+      type: "JPG", //optional, when src= data:uri (nodejs case)
+      width: 53.33, //aspect ratio = width/height
+      height: 26.66,
+      margin: {
+        top: 0, //negative or positive num, from the current position
+        left: 0, //negative or positive num, from the current position
+      },
+    },
+    // stamp: {
+    //     inAllPages: true, //by default = false, just in the last page
+    //     src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/qr_code.jpg",
+    //     type: 'JPG', //optional, when src= data:uri (nodejs case)
+    //     width: 20, //aspect ratio = width/height
+    //     height: 20,
+    //     margin: {
+    //         top: 0, //negative or positive num, from the current position
+    //         left: 0 //negative or positive num, from the current position
+    //     }
+    // },
+  
+    business: {
+      name: localStorage.getItem("studentName"),
+      address:
+        "Student ID :" +
+        localStorage.getItem("studentId") +
+        " Phone:" +
+        localStorage.getItem("phone"),
+      phone: localStorage.getItem("email"),
+      email:
+        "Major: " +
+        localStorage.getItem("major") +
+        "\nMinor: " +
+        localStorage.getItem("minor"),
+      email_1: "\nAdvisor: " + localStorage.getItem("advisor"),
+      website: "",
+    },
+    contact: {
+      margin: {
+        top: 0, //negative or positive num, from the current position
+        left: 0, //negative or positive num, from the current position
+      },
+      label: "",
+      name: "",
+      address: "",
+      phone: "",
+      email: "",
+      otherInfo: "",
+    },
+    invoice: {
+      margin: {
+        top: 0, //negative or positive num, from the current position
+        left: 0, //negative or positive num, from the current position
+      },
+      label: "",
+      num: 19,
+      invDate: "",
+      invGenDate: "",
+      headerBorder: false,
+      tableBodyBorder: false,
+      header: [
+        {
+          title: "#",
+          style: {
+            width: 5,
+            height:30,
+          },
+        },
+        {
+          title: "Type",
+          style: {
+            width: 20,
+            height:30,
+            
+
+          },
+        },
+        {
+          title: "CourseNo",
+          style: {
+            width: 30,
+            height:30,
+
+          },
+        },
+        {
+          title: "CourseName",
+          style: {
+            width: 80,
+            height:30,
+
+          },
+        },
+        { title: "Credits" ,style: {
+          width: 15,
+          height:30,
+        }, },
+        { title: "Semester" ,style: {
+          width: 20,
+          height:30,
+
+        },},
+        { title: "Math" , style: {
+          width: 10,
+          height:30,
+        },},
+        { title: "Grad", style: {
+          width: 10,
+          height:30,
+        }, },
+      ],
+      table: Array.from(majorCourses, (item, index) => [
+        index + 1,
+        areaType.get(item.area),
+        item.courseId,
+        item.courseName,
+        item.credits,
+        item.term+" - "+item.year,
+        item.isMathCourse ? "Yes" : "No",
+        item.isMastersCourse ? "Yes" : "No",
+      ]),
+      additionalRows: [
+        {
+          col1: "Total:",
+          col2: "145,250.50",
+          col3: "ALL",
+          style: {
+            fontSize: 14, //optional, default 12
+          },
+        },
+        {
+          col1: "VAT:",
+          col2: "20",
+          col3: "%",
+          style: {
+            fontSize: 10, //optional, default 12
+          },
+        },
+        {
+          col1: "SubTotal:",
+          col2: "116,199.90",
+          col3: "ALL",
+          style: {
+            fontSize: 10, //optional, default 12
+          },
+        },
+      ],
+      invDescLabel: "",
+      invDesc: "",
+    },
+    footer: {
+      text: "This POS form is validated by CoursePlanr",
+    },
+    pageEnable: true,
+    pageLabel: "Page ",
+  };
+  
+
+  var pdfObject = jsPDFInvoiceTemplate.default(props); //returns number of pages created
+  closePopup();
+}
+
+

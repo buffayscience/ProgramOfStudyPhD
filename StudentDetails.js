@@ -21,6 +21,31 @@ function setDataFunc() {
   var minor = document.getElementById("minor");
   var dateInput = document.getElementById("date-input");
 
+if (studentName.value.length === 0) {
+  alert("Please enter valid Name");
+}
+else if (studentId.value.length === 0) {
+  alert("Please enter valid Student ID");
+}
+else if (email.value.length === 0) {
+  alert("Please enter valid Email");
+}
+else if (phone.value.length === 0) {
+  alert("Please enter valid Phone");
+}
+else if (advisor.value.length === 0) {
+  alert("Please enter valid Advisor Name");
+}
+else if (major.value.length === 0) {
+  alert("Please enter valid Major Name");
+}
+else if (minor.value.length === 0) {
+  alert("Please enter valid Minor Name");
+}
+
+else if (dateInput.value.length === 0) {
+  alert("Please enter valid date");
+}else {
   let data = new StudentModel(
     studentName.value,
     studentId.value,
@@ -33,8 +58,22 @@ function setDataFunc() {
   );
   console.log(data);
 
-  window.location.href = `HomePage.html?object=${JSON.stringify(data)}`;
+  localStorage.setItem('studentData',JSON.stringify(data));
+  localStorage.setItem('studentName',(studentName.value));
+  localStorage.setItem('studentId',(studentId.value));
+  localStorage.setItem('email',(email.value));
+  localStorage.setItem('phone',(phone.value));
+  localStorage.setItem('advisor',(advisor.value));
+  localStorage.setItem('dateInput',(dateInput.value));
+  localStorage.setItem('major',(major.value));
+  localStorage.setItem('minor',(minor.value));
 
+
+
+
+
+  window.location.href = `HomePage.html`;
+  }
 }
 
 function testPDF() {
