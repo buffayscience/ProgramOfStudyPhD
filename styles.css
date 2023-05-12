@@ -261,7 +261,10 @@ form select {
   text-align: left;
   color: white;
   margin: 4px 0px;
-  display: inline-block;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .button {
@@ -289,7 +292,8 @@ form select {
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  justify-content: center;
+  margin-right: 1vh;
+  /* justify-content: center; */
 }
 
 #table-data {
@@ -329,6 +333,25 @@ form select {
   font-weight: 500;
   cursor: pointer;
   justify-content: center;
+}
+
+#addBtn {
+  margin-left: 10px;
+  height: flex;
+  padding: 10px;
+  background: #e5b941;
+  border: none;
+  align-items: center;
+  outline: none;
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: "Quicksand", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  justify-content: center;
+  display: inline-block;
 }
 
 .addMinusBtn {
@@ -385,62 +408,55 @@ form select {
   background: #323232;
 }
 
-
-.popup{
+.popup {
   width: 400px;
   background: #323232;
   border-radius: 6px;
   position: absolute;
   top: 0%;
   left: 50%;
-  transform: translate(-50%,-50%) scale(0.1);
+  transform: translate(-50%, -50%) scale(0.1);
   text-align: center;
   padding: 0 30px 30px;
   color: #333;
   visibility: hidden;
-  transition: transform 0.4s,top 0.4s ;
+  transition: transform 0.4s, top 0.4s;
   opacity: 1; /* Set the opacity to 1 */
   z-index: 9999;
-
-
 }
 
-.openpopup{
+.openpopup {
   visibility: visible;
   top: 50%;
-  transform: translate(-50%,-50%) scale(1);
+  transform: translate(-50%, -50%) scale(1);
   opacity: 1; /* Set the opacity to 1 */
   z-index: 9999;
-
 }
 
-.popup img{
+.popup img {
   width: 100px;
   margin-top: -50px;
   border-radius: 50%;
-  box-shadow:0 2px 5px rgba(0, 0, 0, 0.2) ;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.popup h2{
+.popup h2 {
   font-size: 30px;
   font-weight: 500;
   margin: 30px 0 10px;
   color: white;
 }
 
-.popup p{
+.popup p {
   color: white;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
-
-  
-
 }
-.verifyButton{
+.verifyButton {
   width: 30%;
   margin-left: 30%;
   margin-top: 20px;
-  padding: 10px 0 ;
+  padding: 10px 0;
   background: #10a37f;
   color: #fff;
   border: 0;
@@ -448,18 +464,15 @@ form select {
   font-size: 18px;
   border-radius: 4px;
   cursor: pointer;
-  box-shadow:0 2px 5px rgba(0, 0, 0, 0.2) ;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   display: inline-block;
-
-
-
 }
 
-.popup button{
+.popup button {
   width: 100%;
   margin-top: 50px;
-  padding: 10px 0 ;
+  padding: 10px 0;
   background: #10a37f;
   color: #fff;
   border: 0;
@@ -467,8 +480,6 @@ form select {
   font-size: 18px;
   border-radius: 4px;
   cursor: pointer;
-  box-shadow:0 2px 5px rgba(0, 0, 0, 0.2) ;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-
-
 }

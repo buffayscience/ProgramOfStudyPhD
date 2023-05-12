@@ -218,8 +218,7 @@ function validateCourseData() {
       "Content-Type": "application/json",
     },
     success: function (response) {
-      // If the request was successful, do nothing
-      // alert("-" + response.errorMessage);
+     
       if (response.statusCode == 200) {
         statusImg.src = "images/tick.png";
         popupHeading.textContent = "Success";
@@ -401,7 +400,7 @@ window.onload = function () {
                     <p  id="table-data" >${
                       key + "-" + courses[key].courseName
                     }</p>  
-                    <button class="deleteBtn" id = "add-btn">Add</button></td>
+                    <button class="addBtn" id = "add-btn">Add</button></td>
                 </tr>
             `;
     }
